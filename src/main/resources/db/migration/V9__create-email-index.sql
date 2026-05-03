@@ -1,0 +1,1 @@
+CREATE INDEX idx_identity_email ON tb_identity(email);
