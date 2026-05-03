@@ -1,4 +1,4 @@
-package com.lucasmoraist.lms.application.application.usecases.user;
+package com.lucasmoraist.lms.application.usecases.user;
 
 import com.lucasmoraist.lms.adapter.web.dto.user.CreateUserDTO;
 import com.lucasmoraist.lms.domain.model.Identity;

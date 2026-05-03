@@ -1,7 +1,7 @@
 package com.lucasmoraist.lms.adapter.web.controller;
 
 import com.lucasmoraist.lms.adapter.web.dto.user.CreateUserDTO;
-import com.lucasmoraist.lms.application.application.usecases.user.CreateUserCase;
+import com.lucasmoraist.lms.application.usecases.user.CreateUserCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

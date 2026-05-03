@@ -1,7 +1,7 @@
 package com.lucasmoraist.lms.adapter.web.controller;
 
 import com.lucasmoraist.lms.adapter.web.dto.user.CreateUserDTO;
-import com.lucasmoraist.lms.application.application.usecases.user.CreateUserCase;
+import com.lucasmoraist.lms.application.usecases.user.CreateUserCase;
 import com.lucasmoraist.lms.application.utils.TraceIdUtils;
 import com.lucasmoraist.lms.domain.model.Identity;
 import jakarta.validation.Valid;
