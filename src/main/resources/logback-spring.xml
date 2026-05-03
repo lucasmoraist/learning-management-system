@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <appender name="JsonConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <timeZone>UTC</timeZone>
+            <fieldNames>
+                <version>[ignore]</version>
+                <thread>thread</thread>
+                <logger>logger</logger>
+            </fieldNames>
+        </encoder>
+    </appender>
+    <appender name="FlatConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+    <springProfile name="default">
+        <root level="INFO">
+            <appender-ref ref="JsonConsoleAppender"/>
+        </root>
+    </springProfile>
+</configuration>
