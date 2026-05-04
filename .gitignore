@@ -37,4 +37,4 @@ out/
 .vscode/
 
 ## Private keys
-lms_pv_key.pem
+src/main/resources/lms_pv_key.pem
