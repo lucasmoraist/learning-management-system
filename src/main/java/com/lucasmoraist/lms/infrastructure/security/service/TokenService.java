@@ -32,6 +32,8 @@ import java.util.UUID;
 @Service
 public class TokenService implements TokenGateway {
 
+    // TODO: Pensar em modos de implementar um refresh token para evitar que o usuário precise logar novamente a cada hora, ou seja, a cada expiração do token.
+
     @Value("${spring.application.name}")
     private String applicationName;
     private static final Integer EXPIRATION_TIME_IN_SECONDS = 3600; // 1 hour
