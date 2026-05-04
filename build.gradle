@@ -20,6 +20,7 @@ repositories {
 ext {
 	set('modelMapperVersion', "3.2.6")
 	set('openApiVersion', "3.0.2")
+	set('jwtVersion', "4.5.2")
 }
 
 dependencies {
@@ -62,6 +63,11 @@ dependencies {
 
 	// ModelMapper
     implementation "org.modelmapper:modelmapper:${modelMapperVersion}"
+
+    // Security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation "com.auth0:java-jwt:${jwtVersion}"
+    testImplementation 'org.springframework.boot:spring-boot-starter-security-test'
 }
 
 bootJar {
