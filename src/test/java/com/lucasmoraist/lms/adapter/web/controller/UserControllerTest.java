@@ -2,6 +2,8 @@ package com.lucasmoraist.lms.adapter.web.controller;
 
 import com.lucasmoraist.lms.adapter.web.dto.user.CreateUserDTO;
 import com.lucasmoraist.lms.application.usecases.user.CreateUserCase;
+import com.lucasmoraist.lms.domain.gateway.TokenGateway;
+import com.lucasmoraist.lms.infrastructure.security.service.CustomUserDetailsService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -19,12 +21,19 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserController.class)
 class UserControllerTest {
+
+    @MockitoBean
+    TokenGateway tokenGateway;
+    @MockitoBean
+    CustomUserDetailsService customUserDetailsService;
+
 
     // ---------------------------------
     // Tests for create user endpoint
@@ -53,6 +62,7 @@ class UserControllerTest {
 
             mockMvc.perform(post("/api/v1/users/register")
                             .contentType("application/json")
+                            .with(jwt())
                             .content(dtoJson))
                     .andExpect(status().isCreated())
                     .andExpect(header().stringValues("Location", "/api/v1/auth/login"));
@@ -139,6 +149,7 @@ class UserControllerTest {
         void case02(String invalidPayload) throws Exception {
             mockMvc.perform(post("/api/v1/users/register")
                             .contentType("application/json")
+                            .with(jwt())
                             .content(invalidPayload))
                     .andExpect(status().isBadRequest());
         }
