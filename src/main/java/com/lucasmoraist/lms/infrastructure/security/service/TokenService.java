@@ -34,11 +34,17 @@ public class TokenService implements TokenGateway {
 
     // TODO: Pensar em modos de implementar um refresh token para evitar que o usuário precise logar novamente a cada hora, ou seja, a cada expiração do token.
 
-    @Value("${spring.application.name}")
-    private String applicationName;
     private static final Integer EXPIRATION_TIME_IN_SECONDS = 3600; // 1 hour
-    private final PrivateKey privateKey = loadPrivateKey();
-    private final PublicKey publicKey = loadPublicKey();
+
+    private final String applicationName;
+    private final PrivateKey privateKey;
+    private final PublicKey publicKey;
+
+    public TokenService(@Value("${spring.application.name}") String applicationName) {
+        this.applicationName = applicationName;
+        this.privateKey = loadPrivateKey();
+        this.publicKey = loadPublicKey();
+    }
 
     @Override
     public Token generateToken(Identity identity) {
@@ -98,7 +104,7 @@ public class TokenService implements TokenGateway {
         return LocalDateTime.now().plusSeconds(EXPIRATION_TIME_IN_SECONDS).toInstant(ZoneOffset.of("-03:00"));
     }
 
-    private static PrivateKey loadPrivateKey() {
+    private PrivateKey loadPrivateKey() {
         try {
             ClassPathResource resource = new ClassPathResource("lms_pv_key.pem");
             String privateKeyPem = new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8)
@@ -116,7 +122,7 @@ public class TokenService implements TokenGateway {
         }
     }
 
-    public static PublicKey loadPublicKey() {
+    public PublicKey loadPublicKey() {
         try {
             ClassPathResource resource = new ClassPathResource("lms_pb_key.pem");
             String publicKeyPem = new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8)
