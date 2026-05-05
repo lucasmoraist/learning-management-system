@@ -1,5 +1,6 @@
 package com.lucasmoraist.lms.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,6 +17,7 @@ public class SocialLink {
     private UUID id;
     private String name;
     private String link;
+    @JsonBackReference
     private Profile profile;
 
 }

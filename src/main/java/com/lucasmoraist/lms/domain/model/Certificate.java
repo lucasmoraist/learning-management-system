@@ -1,5 +1,6 @@
 package com.lucasmoraist.lms.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,6 +19,7 @@ public class Certificate {
     private String title;
     private String description;
     private LocalDateTime issuedAt;
+    @JsonBackReference
     private Profile profile;
 
 }

@@ -1,5 +1,7 @@
 package com.lucasmoraist.lms.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,9 +22,13 @@ public class Profile {
     private String name;
     private String bio;
     private LocalDate birthDate;
+    @JsonBackReference
     private Identity identity;
+    @JsonManagedReference
     private List<Certificate> certificates;
+    @JsonManagedReference
     private List<Document> documents;
+    @JsonManagedReference
     private List<SocialLink> socialLinks;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

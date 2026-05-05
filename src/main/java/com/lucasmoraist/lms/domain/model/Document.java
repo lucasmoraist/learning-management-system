@@ -1,5 +1,6 @@
 package com.lucasmoraist.lms.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.lucasmoraist.lms.domain.enums.DocumentType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,6 +18,7 @@ public class Document {
     private UUID id;
     private DocumentType type;
     private String number;
+    @JsonBackReference
     private Profile profile;
 
 }

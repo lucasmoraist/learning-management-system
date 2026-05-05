@@ -1,5 +1,6 @@
 package com.lucasmoraist.lms.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,6 +20,7 @@ public class Identity {
     private String password;
     private Set<Role> roles;
     private Boolean isActive;
+    @JsonManagedReference
     private Profile profile;
 
 }
