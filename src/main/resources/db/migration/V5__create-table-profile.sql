@@ -5,7 +5,7 @@ CREATE TABLE tb_profile (
     identity_id UUID NOT NULL UNIQUE,
     name VARCHAR(255) NOT NULL,
     bio TEXT,
-    birth_day DATE,
+    birth_date DATE,
     created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     CONSTRAINT fk_profile_identity FOREIGN KEY (identity_id) REFERENCES tb_identity(id) ON DELETE CASCADE
