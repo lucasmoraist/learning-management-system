@@ -6,6 +6,7 @@ import com.lucasmoraist.lms.domain.model.Profile;
 import com.lucasmoraist.lms.domain.model.Role;
 import com.lucasmoraist.lms.infrastructure.database.persistence.IdentityPersistence;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
@@ -15,9 +16,11 @@ import java.util.Set;
 public class CreateUserCase {
 
     private final IdentityPersistence identityPersistence;
+    private final PasswordEncoder passwordEncoder;
 
-    public CreateUserCase(IdentityPersistence identityPersistence) {
+    public CreateUserCase(IdentityPersistence identityPersistence, PasswordEncoder passwordEncoder) {
         this.identityPersistence = identityPersistence;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public void execute(String traceId, CreateUserDTO dto) {
@@ -34,7 +37,7 @@ public class CreateUserCase {
 
         Identity newIdentity = Identity.builder()
                 .email(dto.email())
-                .password(dto.password())
+                .password(passwordEncoder.encode(dto.password()))
                 .roles(roles)
                 .profile(profile)
                 .isActive(false)
