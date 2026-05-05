@@ -15,7 +15,7 @@ public class SocialLink {
 
     private UUID id;
     private String name;
-    private String url;
+    private String link;
     private Profile profile;
 
 }

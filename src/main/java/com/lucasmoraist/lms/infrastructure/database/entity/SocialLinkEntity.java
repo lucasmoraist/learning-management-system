@@ -22,7 +22,7 @@ public class SocialLinkEntity {
     @Id
     private UUID id;
     private String name;
-    private String url;
+    private String link;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id")
