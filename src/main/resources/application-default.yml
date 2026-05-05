@@ -3,6 +3,6 @@ spring:
     enabled: true
     baseline-on-migrate: true
   datasource:
-    url: jdbc:postgresql://localhost:5432/lms_db
+    url: jdbc:postgresql://localhost:5432/local_db
     username: postgres
     password: password
