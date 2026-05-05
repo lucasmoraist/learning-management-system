@@ -4,6 +4,6 @@ CREATE TABLE tb_certificate (
     profile_id UUID NOT NULL,
     title VARCHAR(255) NOT NULL,
     description TEXT,
-    issuedAt TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    issued_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     CONSTRAINT fk_certificate_profile FOREIGN KEY (profile_id) REFERENCES tb_profile(id) ON DELETE CASCADE
 );
