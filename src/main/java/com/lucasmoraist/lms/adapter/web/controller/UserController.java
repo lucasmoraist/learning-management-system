@@ -58,7 +58,7 @@ public class UserController {
     @PatchMapping("/me/update")
     public ResponseEntity<Identity> updateCurrentUser(
             @RequestHeader("Authorization") String authorization,
-            @RequestBody UpdateUserDTO dto
+            @Valid @RequestBody UpdateUserDTO dto
     ) {
         String traceId = TraceIdUtils.generateTraceId();
         log.info("[{}] - Updating current user", traceId);
