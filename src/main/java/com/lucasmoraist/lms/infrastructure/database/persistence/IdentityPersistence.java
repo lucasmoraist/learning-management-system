@@ -3,6 +3,7 @@ package com.lucasmoraist.lms.infrastructure.database.persistence;
 import com.lucasmoraist.lms.domain.model.Identity;
 import com.lucasmoraist.lms.infrastructure.database.entity.IdentityEntity;
 import com.lucasmoraist.lms.infrastructure.database.repository.IdentityRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -44,6 +45,15 @@ public class IdentityPersistence {
     public Optional<Identity> findById(UUID id) {
         Optional<IdentityEntity> identityEntityOptional = this.identityRepository.findById(id);
         return identityEntityOptional.map(identityEntity -> this.modelMapper.map(identityEntity, Identity.class));
+    }
+
+    public void deleteByEntity(UUID id) {
+        IdentityEntity identity = this.identityRepository.findById(id)
+                .orElseThrow(() -> {
+                    log.warn("User not found with id: {}", id);
+                    return new EntityNotFoundException("User not found with id: " + id);
+                });
+        this.identityRepository.delete(identity);
     }
 
 }

@@ -2,6 +2,7 @@ package com.lucasmoraist.lms.adapter.web.controller;
 
 import com.lucasmoraist.lms.adapter.web.dto.user.CreateUserDTO;
 import com.lucasmoraist.lms.application.usecases.user.CreateUserCase;
+import com.lucasmoraist.lms.application.usecases.user.DeleteUserCase;
 import com.lucasmoraist.lms.application.usecases.user.GetCurrentUserCase;
 import com.lucasmoraist.lms.application.utils.TraceIdUtils;
 import com.lucasmoraist.lms.domain.model.Identity;
@@ -28,6 +29,7 @@ public class UserController {
 
     private final CreateUserCase createUserCase;
     private final GetCurrentUserCase getCurrentUserCase;
+    private final DeleteUserCase deleteUserCase;
 
     @PostMapping("register")
     public ResponseEntity<Void> createUser(@Valid @RequestBody CreateUserDTO dto) {
@@ -63,6 +65,7 @@ public class UserController {
         String traceId = TraceIdUtils.generateTraceId();
         log.info("[{}] - Deleting current user", traceId);
 
+        this.deleteUserCase.execute(traceId, authorization);
         return ResponseEntity.noContent().build();
     }
 
