@@ -2,6 +2,7 @@ package com.lucasmoraist.lms.adapter.web.controller;
 
 import com.lucasmoraist.lms.adapter.web.dto.user.CreateUserDTO;
 import com.lucasmoraist.lms.application.usecases.user.CreateUserCase;
+import com.lucasmoraist.lms.application.usecases.user.GetCurrentUserCase;
 import com.lucasmoraist.lms.application.utils.TraceIdUtils;
 import com.lucasmoraist.lms.domain.model.Identity;
 import jakarta.validation.Valid;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,6 +27,7 @@ import java.net.URI;
 public class UserController {
 
     private final CreateUserCase createUserCase;
+    private final GetCurrentUserCase getCurrentUserCase;
 
     @PostMapping("register")
     public ResponseEntity<Void> createUser(@Valid @RequestBody CreateUserDTO dto) {
@@ -38,16 +41,16 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<Identity> getCurrentUser() {
+    public ResponseEntity<Identity> getCurrentUser(@RequestHeader("Authorization") String authorization) {
         String traceId = TraceIdUtils.generateTraceId();
         log.info("[{}] - Fetching current user", traceId);
 
-        Identity identity = null;
+        Identity identity = this.getCurrentUserCase.execute(traceId, authorization);
         return ResponseEntity.ok(identity);
     }
 
     @PatchMapping("/me/update")
-    public ResponseEntity<Identity> updateCurrentUser() {
+    public ResponseEntity<Identity> updateCurrentUser(@RequestHeader("Authorization") String authorization) {
         String traceId = TraceIdUtils.generateTraceId();
         log.info("[{}] - Updating current user", traceId);
 
@@ -56,7 +59,7 @@ public class UserController {
     }
 
     @DeleteMapping("/me/delete")
-    public ResponseEntity<Void> deleteCurrentUser() {
+    public ResponseEntity<Void> deleteCurrentUser(@RequestHeader("Authorization") String authorization) {
         String traceId = TraceIdUtils.generateTraceId();
         log.info("[{}] - Deleting current user", traceId);
 
