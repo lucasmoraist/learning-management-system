@@ -26,6 +26,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Base64;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -49,6 +50,10 @@ public class TokenService implements TokenGateway {
     @Override
     public Token generateToken(Identity identity) {
         try {
+            final List<String> roleNames = identity.getRoles().stream()
+                    .map(role -> role.getName().name())
+                    .toList();
+
             Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) publicKey, (RSAPrivateKey) privateKey);
             String token = JWT.create()
                     .withIssuer(applicationName)
@@ -57,7 +62,7 @@ public class TokenService implements TokenGateway {
                     .withJWTId(UUID.randomUUID().toString())
                     .withExpiresAt(generateExpirationDate())
                     .withSubject(identity.getId().toString())
-                    .withClaim("role", identity.getRoles().stream().toList())
+                    .withClaim("role", roleNames)
                     .withClaim("isActive", identity.getIsActive())
                     .withClaim("name", identity.getProfile().getName())
                     .withClaim("email", identity.getEmail())
