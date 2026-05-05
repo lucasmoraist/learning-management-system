@@ -5,10 +5,12 @@ import com.lucasmoraist.lms.adapter.web.handler.model.ExceptionDTO;
 import com.lucasmoraist.lms.domain.exceptions.AuthenticationException;
 import com.lucasmoraist.lms.domain.exceptions.CertificateException;
 import com.lucasmoraist.lms.domain.exceptions.TokenException;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -44,6 +46,18 @@ public class RestExceptionHandler {
     protected ResponseEntity<ExceptionDTO> handleTokenException(TokenException ex) {
         log.warn("Message: {} - ", ex.getMessage(), ex);
         return ResponseEntity.status(401).body(new ExceptionDTO(ex.getMessage(), HttpStatus.UNAUTHORIZED));
+    }
+
+    @ExceptionHandler(MissingRequestHeaderException.class)
+    protected ResponseEntity<ExceptionDTO> handleMissingRequestHeaderException(MissingRequestHeaderException ex) {
+        log.warn("Message: {} - ", ex.getMessage(), ex);
+        return ResponseEntity.status(400).build();
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    protected ResponseEntity<ExceptionDTO> handleEntityNotFoundException(EntityNotFoundException ex) {
+        log.warn("Message: {} - ", ex.getMessage(), ex);
+        return ResponseEntity.status(404).build();
     }
 
     @ExceptionHandler(Exception.class)
