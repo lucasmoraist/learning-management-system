@@ -1,9 +1,11 @@
 package com.lucasmoraist.lms.adapter.web.controller;
 
 import com.lucasmoraist.lms.adapter.web.dto.user.CreateUserDTO;
+import com.lucasmoraist.lms.adapter.web.dto.user.UpdateUserDTO;
 import com.lucasmoraist.lms.application.usecases.user.CreateUserCase;
 import com.lucasmoraist.lms.application.usecases.user.DeleteUserCase;
 import com.lucasmoraist.lms.application.usecases.user.GetCurrentUserCase;
+import com.lucasmoraist.lms.application.usecases.user.UpdateUserCase;
 import com.lucasmoraist.lms.application.utils.TraceIdUtils;
 import com.lucasmoraist.lms.domain.model.Identity;
 import jakarta.validation.Valid;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -29,6 +32,7 @@ public class UserController {
 
     private final CreateUserCase createUserCase;
     private final GetCurrentUserCase getCurrentUserCase;
+    private final UpdateUserCase updateUserCase;
     private final DeleteUserCase deleteUserCase;
 
     @PostMapping("register")
@@ -52,11 +56,14 @@ public class UserController {
     }
 
     @PatchMapping("/me/update")
-    public ResponseEntity<Identity> updateCurrentUser(@RequestHeader("Authorization") String authorization) {
+    public ResponseEntity<Identity> updateCurrentUser(
+            @RequestHeader("Authorization") String authorization,
+            @RequestBody UpdateUserDTO dto
+    ) {
         String traceId = TraceIdUtils.generateTraceId();
         log.info("[{}] - Updating current user", traceId);
 
-        Identity identity = null;
+        Identity identity = this.updateUserCase.execute(traceId, authorization, dto);
         return ResponseEntity.ok(identity);
     }
 
