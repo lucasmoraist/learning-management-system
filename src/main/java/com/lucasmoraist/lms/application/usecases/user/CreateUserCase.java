@@ -1,6 +1,7 @@
 package com.lucasmoraist.lms.application.usecases.user;
 
 import com.lucasmoraist.lms.adapter.web.dto.user.CreateUserDTO;
+import com.lucasmoraist.lms.domain.exceptions.UniqueKeyDatabaseException;
 import com.lucasmoraist.lms.domain.model.Identity;
 import com.lucasmoraist.lms.domain.model.Profile;
 import com.lucasmoraist.lms.domain.model.Role;
@@ -24,6 +25,12 @@ public class CreateUserCase {
     }
 
     public void execute(String traceId, CreateUserDTO dto) {
+        this.identityPersistence.findByEmail(dto.email())
+                .ifPresent(it -> {
+                    log.warn("[{}] - User with email {} already exists", traceId, dto.email());
+                    throw new UniqueKeyDatabaseException("User with email " + dto.email() + " already exists");
+                });
+
         Set<Role> roles = Set.of(
                 Role.builder()
                         .name(dto.role())
