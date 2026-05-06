@@ -8,6 +8,7 @@ import com.lucasmoraist.lms.application.usecases.user.GetCurrentUserCase;
 import com.lucasmoraist.lms.application.usecases.user.UpdateUserCase;
 import com.lucasmoraist.lms.domain.enums.RoleType;
 import com.lucasmoraist.lms.domain.exceptions.AuthenticationException;
+import com.lucasmoraist.lms.domain.exceptions.UniqueKeyDatabaseException;
 import com.lucasmoraist.lms.domain.gateway.TokenGateway;
 import com.lucasmoraist.lms.domain.model.Identity;
 import com.lucasmoraist.lms.domain.model.Profile;
@@ -176,6 +177,32 @@ class UserControllerTest {
                             .with(jwt())
                             .content(invalidPayload))
                     .andExpect(status().isBadRequest());
+        }
+
+        @Test
+        @DisplayName("Should return 409 Conflict when email is already in use")
+        void case03() throws Exception {
+            String dtoJson = """
+                    {
+                        "name": "John Doe",
+                        "birthDate": "2000-01-01",
+                        "email": "johndoe@email.com",
+                        "password": "password123",
+                        "role": "STUDENT"
+                    }
+                    """;
+
+            doThrow(UniqueKeyDatabaseException.class)
+                    .when(createUserCase)
+                    .execute(any(), any());
+
+            mockMvc.perform(post("/api/v1/users/register")
+                            .contentType("application/json")
+                            .with(jwt())
+                            .content(dtoJson))
+                    .andExpect(status().isConflict());
+
+            verify(createUserCase, times(1)).execute(anyString(), any(CreateUserDTO.class));
         }
 
     }
