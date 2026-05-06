@@ -305,14 +305,14 @@ class UserControllerTest {
                     Arguments.of("{\"profile\": {\"bio\": \"Java Developer\"}}"),
                     Arguments.of("{}"),
                     Arguments.of("""
-                {
-                    "email": "johndoe@email.com",
-                    "profile": {
-                        "name": "John Doe",
-                        "bio": "Engenheiro de Software Pleno"
-                    }
-                }
-            """)
+                        {
+                            "email": "johndoe@email.com",
+                            "profile": {
+                                "name": "John Doe",
+                                "bio": "Engenheiro de Software Pleno"
+                            }
+                        }
+                    """)
             );
         }
 
