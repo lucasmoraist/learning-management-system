@@ -5,6 +5,7 @@ import com.lucasmoraist.lms.adapter.web.handler.model.ExceptionDTO;
 import com.lucasmoraist.lms.domain.exceptions.AuthenticationException;
 import com.lucasmoraist.lms.domain.exceptions.CertificateException;
 import com.lucasmoraist.lms.domain.exceptions.TokenException;
+import com.lucasmoraist.lms.domain.exceptions.UniqueKeyDatabaseException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -60,9 +61,15 @@ public class RestExceptionHandler {
         return ResponseEntity.status(404).build();
     }
 
+    @ExceptionHandler(UniqueKeyDatabaseException.class)
+    protected ResponseEntity<ExceptionDTO> handleUniqueKeyDatabaseException(UniqueKeyDatabaseException ex) {
+        log.warn("Message: {} - ", ex.getMessage(), ex);
+        return ResponseEntity.status(409).body(new ExceptionDTO(ex.getMessage(), HttpStatus.CONFLICT));
+    }
+
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<Void> handleGenericException(Exception ex) {
-        log.error("Message: {} - ", ex.getMessage(), ex);
+        log.error("Exception Class: [{}] - Message: [{}]", ex.getClass(), ex.getMessage(), ex);
         return ResponseEntity.internalServerError().build();
     }
 
