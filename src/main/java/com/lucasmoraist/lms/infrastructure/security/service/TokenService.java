@@ -127,7 +127,7 @@ public class TokenService implements TokenGateway {
         }
     }
 
-    public PublicKey loadPublicKey() {
+    private PublicKey loadPublicKey() {
         try {
             ClassPathResource resource = new ClassPathResource("lms_pb_key.pem");
             String publicKeyPem = new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8)
