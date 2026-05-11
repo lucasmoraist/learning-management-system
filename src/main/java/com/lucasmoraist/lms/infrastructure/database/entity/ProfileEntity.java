@@ -11,7 +11,9 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -36,6 +38,8 @@ public class ProfileEntity {
 
     @OneToOne
     @JoinColumn(name = "identity_id", unique = true, nullable = false)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private IdentityEntity identity;
 
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
