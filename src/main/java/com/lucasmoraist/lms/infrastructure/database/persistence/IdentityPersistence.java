@@ -1,11 +1,15 @@
 package com.lucasmoraist.lms.infrastructure.database.persistence;
 
 import com.lucasmoraist.lms.domain.model.Identity;
+import com.lucasmoraist.lms.infrastructure.database.entity.DocumentEntity;
 import com.lucasmoraist.lms.infrastructure.database.entity.IdentityEntity;
+import com.lucasmoraist.lms.infrastructure.database.entity.ProfileEntity;
 import com.lucasmoraist.lms.infrastructure.database.repository.IdentityRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,12 +28,24 @@ public class IdentityPersistence {
         this.modelMapper = modelMapper;
     }
 
+    public Page<Identity> findAll(Pageable pageable) {
+        Page<IdentityEntity> identityEntities = this.identityRepository.findAll(pageable);
+        return identityEntities.map(identityEntity -> this.modelMapper.map(identityEntity, Identity.class));
+    }
+
     @Transactional
     public Identity save(Identity identity) {
         IdentityEntity identityEntity = this.modelMapper.map(identity, IdentityEntity.class);
 
         if (identityEntity.getProfile() != null) {
-            identityEntity.getProfile().setIdentity(identityEntity);
+            ProfileEntity profile = identityEntity.getProfile();
+            profile.setIdentity(identityEntity);
+
+            if (profile.getDocuments() != null) {
+                for (DocumentEntity documentEntity : profile.getDocuments()) {
+                    documentEntity.setProfile(profile);
+                }
+            }
         }
 
         IdentityEntity identityEntitySaved = this.identityRepository.saveAndFlush(identityEntity);
