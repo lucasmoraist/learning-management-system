@@ -46,7 +46,7 @@ public class RestExceptionHandler {
     @ExceptionHandler(TokenException.class)
     protected ResponseEntity<ExceptionDTO> handleTokenException(TokenException ex) {
         log.warn("Message: {} - ", ex.getMessage(), ex);
-        return ResponseEntity.status(401).body(new ExceptionDTO(ex.getMessage(), HttpStatus.UNAUTHORIZED));
+        return ResponseEntity.status(401).build();
     }
 
     @ExceptionHandler(MissingRequestHeaderException.class)
