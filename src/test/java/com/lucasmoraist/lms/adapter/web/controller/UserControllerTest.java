@@ -79,6 +79,7 @@ class UserControllerTest {
                     {
                         "name": "John Doe",
                         "birthDate": "2000-01-01",
+                        "document": "86100550865",
                         "email": "johndoe@email.com",
                         "password": "password123",
                         "role": "STUDENT"
@@ -186,6 +187,7 @@ class UserControllerTest {
                     {
                         "name": "John Doe",
                         "birthDate": "2000-01-01",
+                        "document": "86100550865",
                         "email": "johndoe@email.com",
                         "password": "password123",
                         "role": "STUDENT"

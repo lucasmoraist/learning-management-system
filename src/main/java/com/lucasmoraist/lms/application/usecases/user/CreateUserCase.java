@@ -1,7 +1,9 @@
 package com.lucasmoraist.lms.application.usecases.user;
 
 import com.lucasmoraist.lms.adapter.web.dto.user.CreateUserDTO;
+import com.lucasmoraist.lms.domain.enums.DocumentType;
 import com.lucasmoraist.lms.domain.exceptions.UniqueKeyDatabaseException;
+import com.lucasmoraist.lms.domain.model.Document;
 import com.lucasmoraist.lms.domain.model.Identity;
 import com.lucasmoraist.lms.domain.model.Profile;
 import com.lucasmoraist.lms.domain.model.Role;
@@ -10,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Set;
 
 @Slf4j
@@ -37,9 +40,15 @@ public class CreateUserCase {
                         .build()
         );
 
+        List<Document> documents = List.of(Document.builder()
+                .number(dto.document())
+                .type(DocumentType.findDocumentByValue(dto.document()))
+                .build());
+
         Profile profile = Profile.builder()
                 .name(dto.name())
                 .birthDate(dto.birthDate())
+                .documents(documents)
                 .build();
 
         Identity newIdentity = Identity.builder()

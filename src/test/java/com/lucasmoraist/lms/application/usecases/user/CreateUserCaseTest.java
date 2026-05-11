@@ -47,6 +47,7 @@ class CreateUserCaseTest {
         dto = new CreateUserDTO(
                 "John Doe",
                 LocalDate.of(2000, 1, 1),
+                "86100550865",
                 "johndoe@email.com",
                 "password123",
                 RoleType.STUDENT

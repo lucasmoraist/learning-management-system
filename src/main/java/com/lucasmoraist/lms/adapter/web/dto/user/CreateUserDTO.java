@@ -14,6 +14,9 @@ public record CreateUserDTO(
         String name,
         @NotNull(message = "Birth date is required")
         LocalDate birthDate,
+        @Size(min = 11, max = 14, message = "Document must be between 11 and 14 characters")
+        @NotBlank(message = "Document is required")
+        String document,
         @NotBlank(message = "Email is required")
         @Email(message = "Email should be valid")
         String email,
