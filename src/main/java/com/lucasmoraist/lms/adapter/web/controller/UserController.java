@@ -5,12 +5,14 @@ import com.lucasmoraist.lms.adapter.web.dto.user.UpdateUserDTO;
 import com.lucasmoraist.lms.application.usecases.user.CreateUserCase;
 import com.lucasmoraist.lms.application.usecases.user.DeleteUserCase;
 import com.lucasmoraist.lms.application.usecases.user.GetCurrentUserCase;
+import com.lucasmoraist.lms.application.usecases.user.ListUsersCase;
 import com.lucasmoraist.lms.application.usecases.user.UpdateUserCase;
 import com.lucasmoraist.lms.application.utils.TraceIdUtils;
 import com.lucasmoraist.lms.domain.model.Identity;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,10 +21,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -31,6 +33,7 @@ import java.util.Map;
 public class UserController {
 
     private final CreateUserCase createUserCase;
+    private final ListUsersCase listUsersCase;
     private final GetCurrentUserCase getCurrentUserCase;
     private final UpdateUserCase updateUserCase;
     private final DeleteUserCase deleteUserCase;
@@ -53,6 +56,17 @@ public class UserController {
 
         Identity identity = this.getCurrentUserCase.execute(traceId, authorization);
         return ResponseEntity.ok(identity);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<Page<Identity>> listUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        String traceId = TraceIdUtils.generateTraceId();
+        log.info("[{}] - Listing users", traceId);
+
+        Page<Identity> identities = this.listUsersCase.execute(traceId, page, size);
+        return ResponseEntity.ok(identities);
     }
 
     @PatchMapping("/me/update")
