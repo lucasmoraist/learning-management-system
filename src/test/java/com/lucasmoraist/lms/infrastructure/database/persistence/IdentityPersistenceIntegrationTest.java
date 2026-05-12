@@ -4,7 +4,7 @@ import com.lucasmoraist.lms.domain.enums.RoleType;
 import com.lucasmoraist.lms.domain.model.user.Identity;
 import com.lucasmoraist.lms.domain.model.user.Profile;
 import com.lucasmoraist.lms.domain.model.user.Role;
-import com.lucasmoraist.lms.infrastructure.database.entity.IdentityEntity;
+import com.lucasmoraist.lms.infrastructure.database.entity.user.IdentityEntity;
 import com.lucasmoraist.lms.infrastructure.database.repository.IdentityRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;

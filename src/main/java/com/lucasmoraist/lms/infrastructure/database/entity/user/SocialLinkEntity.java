@@ -1,4 +1,4 @@
-package com.lucasmoraist.lms.infrastructure.database.entity;
+package com.lucasmoraist.lms.infrastructure.database.entity.user;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

@@ -1,12 +1,15 @@
-package com.lucasmoraist.lms.infrastructure.database.entity;
+package com.lucasmoraist.lms.infrastructure.database.entity.user;
 
-import com.lucasmoraist.lms.domain.enums.RoleType;
+import com.lucasmoraist.lms.domain.enums.DocumentType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,13 +20,18 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tb_role")
-@Entity(name = "tb_role")
-public class RoleEntity {
+@Table(name = "tb_document")
+@Entity(name = "tb_document")
+public class DocumentEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     @Enumerated(EnumType.STRING)
-    private RoleType name;
+    private DocumentType type;
+    private String number;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "profile_id")
+    private ProfileEntity profile;
 
 }

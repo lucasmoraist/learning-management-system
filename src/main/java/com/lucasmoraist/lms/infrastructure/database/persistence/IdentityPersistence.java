@@ -1,9 +1,9 @@
 package com.lucasmoraist.lms.infrastructure.database.persistence;
 
 import com.lucasmoraist.lms.domain.model.user.Identity;
-import com.lucasmoraist.lms.infrastructure.database.entity.DocumentEntity;
-import com.lucasmoraist.lms.infrastructure.database.entity.IdentityEntity;
-import com.lucasmoraist.lms.infrastructure.database.entity.ProfileEntity;
+import com.lucasmoraist.lms.infrastructure.database.entity.user.DocumentEntity;
+import com.lucasmoraist.lms.infrastructure.database.entity.user.IdentityEntity;
+import com.lucasmoraist.lms.infrastructure.database.entity.user.ProfileEntity;
 import com.lucasmoraist.lms.infrastructure.database.repository.IdentityRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
