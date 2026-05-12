@@ -8,7 +8,7 @@ import com.lucasmoraist.lms.domain.exceptions.TokenException;
 import com.lucasmoraist.lms.domain.model.user.Identity;
 import com.lucasmoraist.lms.domain.model.user.Profile;
 import com.lucasmoraist.lms.domain.model.user.Role;
-import com.lucasmoraist.lms.domain.model.Token;
+import com.lucasmoraist.lms.domain.model.auth.Token;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

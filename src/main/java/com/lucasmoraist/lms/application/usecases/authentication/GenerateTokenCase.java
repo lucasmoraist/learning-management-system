@@ -4,7 +4,7 @@ import com.lucasmoraist.lms.adapter.web.dto.auth.LoginDTO;
 import com.lucasmoraist.lms.domain.exceptions.AuthenticationException;
 import com.lucasmoraist.lms.domain.gateway.TokenGateway;
 import com.lucasmoraist.lms.domain.model.user.Identity;
-import com.lucasmoraist.lms.domain.model.Token;
+import com.lucasmoraist.lms.domain.model.auth.Token;
 import com.lucasmoraist.lms.infrastructure.database.persistence.IdentityPersistence;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;

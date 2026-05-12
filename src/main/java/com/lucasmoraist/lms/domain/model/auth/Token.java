@@ -1,4 +1,4 @@
-package com.lucasmoraist.lms.domain.model;
+package com.lucasmoraist.lms.domain.model.auth;
 
 import lombok.Getter;
 

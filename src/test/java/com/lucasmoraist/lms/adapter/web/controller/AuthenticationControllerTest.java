@@ -5,7 +5,7 @@ import com.lucasmoraist.lms.domain.exceptions.AuthenticationException;
 import com.lucasmoraist.lms.domain.exceptions.CertificateException;
 import com.lucasmoraist.lms.domain.exceptions.TokenException;
 import com.lucasmoraist.lms.domain.gateway.TokenGateway;
-import com.lucasmoraist.lms.domain.model.Token;
+import com.lucasmoraist.lms.domain.model.auth.Token;
 import com.lucasmoraist.lms.infrastructure.security.service.CustomUserDetailsService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

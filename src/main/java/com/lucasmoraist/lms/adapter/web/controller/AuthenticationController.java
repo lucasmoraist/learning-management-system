@@ -3,7 +3,7 @@ package com.lucasmoraist.lms.adapter.web.controller;
 import com.lucasmoraist.lms.adapter.web.dto.auth.LoginDTO;
 import com.lucasmoraist.lms.application.usecases.authentication.GenerateTokenCase;
 import com.lucasmoraist.lms.application.utils.TraceIdUtils;
-import com.lucasmoraist.lms.domain.model.Token;
+import com.lucasmoraist.lms.domain.model.auth.Token;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
