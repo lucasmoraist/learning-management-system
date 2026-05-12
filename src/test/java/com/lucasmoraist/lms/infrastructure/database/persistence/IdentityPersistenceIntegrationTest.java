@@ -1,9 +1,9 @@
 package com.lucasmoraist.lms.infrastructure.database.persistence;
 
 import com.lucasmoraist.lms.domain.enums.RoleType;
-import com.lucasmoraist.lms.domain.model.Identity;
-import com.lucasmoraist.lms.domain.model.Profile;
-import com.lucasmoraist.lms.domain.model.Role;
+import com.lucasmoraist.lms.domain.model.user.Identity;
+import com.lucasmoraist.lms.domain.model.user.Profile;
+import com.lucasmoraist.lms.domain.model.user.Role;
 import com.lucasmoraist.lms.infrastructure.database.entity.IdentityEntity;
 import com.lucasmoraist.lms.infrastructure.database.repository.IdentityRepository;
 import jakarta.persistence.EntityNotFoundException;

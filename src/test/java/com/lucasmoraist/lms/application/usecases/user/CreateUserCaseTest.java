@@ -4,7 +4,7 @@ import com.lucasmoraist.lms.adapter.web.dto.user.CreateUserDTO;
 import com.lucasmoraist.lms.application.utils.TraceIdUtils;
 import com.lucasmoraist.lms.domain.enums.RoleType;
 import com.lucasmoraist.lms.domain.exceptions.UniqueKeyDatabaseException;
-import com.lucasmoraist.lms.domain.model.Identity;
+import com.lucasmoraist.lms.domain.model.user.Identity;
 import com.lucasmoraist.lms.infrastructure.database.persistence.IdentityPersistence;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

@@ -1,6 +1,6 @@
 package com.lucasmoraist.lms.infrastructure.security.service;
 
-import com.lucasmoraist.lms.domain.model.Identity;
+import com.lucasmoraist.lms.domain.model.user.Identity;
 import com.lucasmoraist.lms.infrastructure.database.persistence.IdentityPersistence;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

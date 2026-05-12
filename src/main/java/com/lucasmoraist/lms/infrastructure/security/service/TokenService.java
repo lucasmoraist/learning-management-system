@@ -7,7 +7,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.lucasmoraist.lms.domain.exceptions.CertificateException;
 import com.lucasmoraist.lms.domain.exceptions.TokenException;
 import com.lucasmoraist.lms.domain.gateway.TokenGateway;
-import com.lucasmoraist.lms.domain.model.Identity;
+import com.lucasmoraist.lms.domain.model.user.Identity;
 import com.lucasmoraist.lms.domain.model.Token;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

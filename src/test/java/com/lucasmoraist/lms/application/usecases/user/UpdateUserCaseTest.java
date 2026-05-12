@@ -2,7 +2,7 @@ package com.lucasmoraist.lms.application.usecases.user;
 
 import com.lucasmoraist.lms.adapter.web.dto.user.UpdateUserDTO;
 import com.lucasmoraist.lms.domain.exceptions.AuthenticationException;
-import com.lucasmoraist.lms.domain.model.Identity;
+import com.lucasmoraist.lms.domain.model.user.Identity;
 import com.lucasmoraist.lms.infrastructure.database.persistence.IdentityPersistence;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

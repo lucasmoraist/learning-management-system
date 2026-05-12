@@ -1,6 +1,6 @@
 package com.lucasmoraist.lms.domain.gateway;
 
-import com.lucasmoraist.lms.domain.model.Identity;
+import com.lucasmoraist.lms.domain.model.user.Identity;
 import com.lucasmoraist.lms.domain.model.Token;
 
 public interface TokenGateway {

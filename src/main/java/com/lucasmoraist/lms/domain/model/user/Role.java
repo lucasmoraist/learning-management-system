@@ -1,4 +1,4 @@
-package com.lucasmoraist.lms.domain.model;
+package com.lucasmoraist.lms.domain.model.user;
 
 import com.lucasmoraist.lms.domain.enums.RoleType;
 import lombok.AllArgsConstructor;

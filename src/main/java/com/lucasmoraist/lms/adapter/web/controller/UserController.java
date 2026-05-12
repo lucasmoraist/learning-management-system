@@ -8,7 +8,7 @@ import com.lucasmoraist.lms.application.usecases.user.GetCurrentUserCase;
 import com.lucasmoraist.lms.application.usecases.user.ListUsersCase;
 import com.lucasmoraist.lms.application.usecases.user.UpdateUserCase;
 import com.lucasmoraist.lms.application.utils.TraceIdUtils;
-import com.lucasmoraist.lms.domain.model.Identity;
+import com.lucasmoraist.lms.domain.model.user.Identity;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

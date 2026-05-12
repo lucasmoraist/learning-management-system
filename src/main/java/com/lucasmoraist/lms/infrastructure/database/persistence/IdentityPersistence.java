@@ -1,6 +1,6 @@
 package com.lucasmoraist.lms.infrastructure.database.persistence;
 
-import com.lucasmoraist.lms.domain.model.Identity;
+import com.lucasmoraist.lms.domain.model.user.Identity;
 import com.lucasmoraist.lms.infrastructure.database.entity.DocumentEntity;
 import com.lucasmoraist.lms.infrastructure.database.entity.IdentityEntity;
 import com.lucasmoraist.lms.infrastructure.database.entity.ProfileEntity;
