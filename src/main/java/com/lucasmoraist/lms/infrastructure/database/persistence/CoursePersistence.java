@@ -9,6 +9,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+import java.util.UUID;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -16,6 +19,11 @@ public class CoursePersistence {
 
     private final CourseRepository courseRepository;
     private final ModelMapper modelMapper;
+
+    public Optional<Course> findById(UUID courseId) {
+        Optional<CourseEntity> entityOpt = this.courseRepository.findById(courseId);
+        return entityOpt.map(entity -> this.modelMapper.map(entity, Course.class));
+    }
 
     @Transactional
     public Course save(Course course) {
