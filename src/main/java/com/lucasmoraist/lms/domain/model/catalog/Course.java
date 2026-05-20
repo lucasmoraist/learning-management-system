@@ -22,5 +22,6 @@ public class Course {
     private Identity instructor;
     private List<Module> modules;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
 }
