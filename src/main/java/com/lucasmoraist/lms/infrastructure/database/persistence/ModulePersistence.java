@@ -7,12 +7,20 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+import java.util.UUID;
+
 @Component
 @RequiredArgsConstructor
 public class ModulePersistence {
 
     private final ModuleRepository moduleRepository;
     private final ModelMapper modelMapper;
+
+    public Optional<Module> findById(UUID moduleId) {
+        return this.moduleRepository.findById(moduleId)
+                .map(entity -> this.modelMapper.map(entity, Module.class));
+    }
 
     public Module save(Module module) {
         ModuleEntity entity = this.modelMapper.map(module, ModuleEntity.class);
