@@ -38,3 +38,4 @@ out/
 
 ## Private keys
 src/main/resources/lms_pv_key.pem
+.env
