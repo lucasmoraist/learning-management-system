@@ -21,6 +21,7 @@ ext {
 	set('modelMapperVersion', "3.2.6")
 	set('openApiVersion', "3.0.2")
 	set('jwtVersion', "4.5.2")
+	set('awsSdkVersion', '2.44.9')
 }
 
 dependencies {
@@ -70,6 +71,9 @@ dependencies {
     implementation "com.auth0:java-jwt:${jwtVersion}"
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     testImplementation 'org.springframework.boot:spring-boot-starter-security-test'
+
+    // S3
+    implementation "software.amazon.awssdk:s3:${awsSdkVersion}"
 }
 
 bootJar {
