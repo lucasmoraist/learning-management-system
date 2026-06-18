@@ -44,4 +44,20 @@ public class AwsS3Service implements BucketGateway {
         }
     }
 
+    @Override
+    public String getPublicUrl(String key) {
+        if (key == null || key.isEmpty()) {
+            log.warn("Key is null or empty, cannot generate public URL");
+            return "";
+        }
+
+        String publicBaseUrl = s3Properties.getEndpoint().replace("/s3", "");
+
+        return String.format("%s/object/public/%s/%s",
+                publicBaseUrl,
+                s3Properties.getBucketName(),
+                key
+        );
+    }
+
 }

@@ -4,4 +4,5 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface BucketGateway {
     void uploadFile(String key, MultipartFile file);
+    String getPublicUrl(String key);
 }
