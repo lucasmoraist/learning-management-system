@@ -7,12 +7,14 @@ import com.lucasmoraist.lms.domain.model.catalog.Lesson;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.util.UUID;
@@ -25,17 +27,18 @@ public class LessonController {
 
     private final AddLessonToModuleCase addLessonToModuleCase;
 
-    @PostMapping("/add/{moduleId}")
+    @PostMapping(value = "/add/module/{moduleId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> addModuleToCourse(
             @PathVariable UUID moduleId,
-            @Valid @RequestBody CreateLessonDTO dto
+            @Valid @RequestPart("data") CreateLessonDTO dto,
+            @RequestPart("video") MultipartFile video
     ) {
         final String traceId = TraceIdUtils.generateTraceId();
         log.info("[{}] - Adding module to course with ID {}", traceId, moduleId);
 
-        Lesson module = this.addLessonToModuleCase.execute(traceId, moduleId, dto);
+        Lesson lesson = this.addLessonToModuleCase.execute(traceId, moduleId, dto, video);
 
-        URI location = URI.create("/api/v1/lessons/" + module.getId());
+        URI location = URI.create("/api/v1/lessons/" + lesson.getId());
         return ResponseEntity.created(location).build();
     }
 
