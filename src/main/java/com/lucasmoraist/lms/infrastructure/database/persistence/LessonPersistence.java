@@ -7,12 +7,20 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 @RequiredArgsConstructor
 public class LessonPersistence {
 
     private final LessonRepository lessonRepository;
     private final ModelMapper modelMapper;
+
+    public Lesson getLessonById(UUID lessonId) {
+        LessonEntity entity = this.lessonRepository.findById(lessonId)
+                .orElseThrow(() -> new RuntimeException("Lesson not found"));
+        return this.modelMapper.map(entity, Lesson.class);
+    }
 
     public Lesson save(Lesson lesson) {
         LessonEntity entity = this.modelMapper.map(lesson, LessonEntity.class);
