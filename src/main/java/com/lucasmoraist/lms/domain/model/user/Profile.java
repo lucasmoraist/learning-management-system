@@ -2,6 +2,7 @@ package com.lucasmoraist.lms.domain.model.user;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.lucasmoraist.lms.domain.model.payment.Subscription;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,6 +25,8 @@ public class Profile {
     private LocalDate birthDate;
     @JsonBackReference
     private Identity identity;
+    @JsonManagedReference
+    private Subscription subscription;
     @JsonManagedReference
     private List<Certificate> certificates;
     @JsonManagedReference

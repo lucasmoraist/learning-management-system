@@ -1,5 +1,6 @@
 package com.lucasmoraist.lms.infrastructure.database.entity.user;
 
+import com.lucasmoraist.lms.infrastructure.database.entity.payment.SubscriptionEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -37,10 +38,16 @@ public class ProfileEntity {
     private LocalDate birthDate;
 
     @OneToOne
-    @JoinColumn(name = "identity_id", unique = true, nullable = false)
-    @EqualsAndHashCode.Exclude
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JoinColumn(name = "identity_id", unique = true, nullable = false)
     private IdentityEntity identity;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToOne(mappedBy = "identityId", cascade = CascadeType.ALL)
+    @JoinColumn(name = "subscription_id", unique = true, nullable = false)
+    private SubscriptionEntity subscription;
 
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CertificateEntity> certificates = new ArrayList<>();
