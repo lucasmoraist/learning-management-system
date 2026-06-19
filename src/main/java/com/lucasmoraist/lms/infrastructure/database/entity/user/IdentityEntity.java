@@ -41,9 +41,9 @@ public class IdentityEntity {
     private Set<RoleEntity> roles = new HashSet<>();
     private Boolean isActive;
 
-    @OneToOne(mappedBy = "identity", cascade = CascadeType.ALL)
-    @EqualsAndHashCode.Exclude
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToOne(mappedBy = "identity", cascade = CascadeType.ALL)
     private ProfileEntity profile;
 
 }
