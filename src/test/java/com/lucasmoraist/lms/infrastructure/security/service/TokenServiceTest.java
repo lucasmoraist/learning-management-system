@@ -52,7 +52,7 @@ class TokenServiceTest {
     }
 
     private Identity createMockIdentity() {
-        Role role = Role.builder().name(RoleType.STUDENT).build();
+        Role role = Role.builder().name(RoleType.USER).build();
         Profile profile = Profile.builder().name("John Doe").build();
 
         return Identity.builder()
@@ -82,7 +82,7 @@ class TokenServiceTest {
             DecodedJWT decodedJWT = JWT.require(Algorithm.RSA256(publicKey, privateKey)).build().verify(result.getAccessToken());
             assertThat(decodedJWT.getSubject()).isEqualTo(identity.getId().toString());
             assertThat(decodedJWT.getClaim("email").asString()).isEqualTo(identity.getEmail());
-            assertThat(decodedJWT.getClaim("role").asList(String.class)).contains("STUDENT");
+            assertThat(decodedJWT.getClaim("role").asList(String.class)).contains("USER");
         }
 
         @Test

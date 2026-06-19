@@ -50,7 +50,7 @@ class CreateUserCaseTest {
                 "86100550865",
                 "johndoe@email.com",
                 "password123",
-                RoleType.STUDENT
+                RoleType.USER
         );
     }
 

@@ -39,7 +39,7 @@ class IdentityPersistenceIntegrationTest {
         this.identityRepository.deleteAll();
 
         Role role = Role.builder()
-                .name(RoleType.STUDENT)
+                .name(RoleType.USER)
                 .build();
         Profile profile = Profile.builder()
                 .name("John Doe")
