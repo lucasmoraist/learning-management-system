@@ -49,8 +49,7 @@ class CreateUserCaseTest {
                 LocalDate.of(2000, 1, 1),
                 "86100550865",
                 "johndoe@email.com",
-                "password123",
-                RoleType.USER
+                "password123"
         );
     }
 

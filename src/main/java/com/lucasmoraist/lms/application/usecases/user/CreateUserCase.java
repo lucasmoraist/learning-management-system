@@ -2,6 +2,7 @@ package com.lucasmoraist.lms.application.usecases.user;
 
 import com.lucasmoraist.lms.adapter.web.dto.user.CreateUserDTO;
 import com.lucasmoraist.lms.domain.enums.DocumentType;
+import com.lucasmoraist.lms.domain.enums.RoleType;
 import com.lucasmoraist.lms.domain.exceptions.UniqueKeyDatabaseException;
 import com.lucasmoraist.lms.domain.model.user.Document;
 import com.lucasmoraist.lms.domain.model.user.Identity;
@@ -36,7 +37,7 @@ public class CreateUserCase {
 
         Set<Role> roles = Set.of(
                 Role.builder()
-                        .name(dto.role())
+                        .name(RoleType.USER)
                         .build()
         );
 

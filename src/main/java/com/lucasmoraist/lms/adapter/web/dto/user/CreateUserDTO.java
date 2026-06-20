@@ -1,6 +1,5 @@
 package com.lucasmoraist.lms.adapter.web.dto.user;
 
-import com.lucasmoraist.lms.domain.enums.RoleType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -22,9 +21,7 @@ public record CreateUserDTO(
         String email,
         @NotBlank(message = "Password is required")
         @Size(min = 6, max = 255, message = "Password must be at least 6 characters long")
-        String password,
-        @NotNull(message = "Role is required")
-        RoleType role
+        String password
 ) {
 
 }
