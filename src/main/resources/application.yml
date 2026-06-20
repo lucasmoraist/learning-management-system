@@ -22,8 +22,8 @@ spring:
 
 aws:
   s3:
-    endpoint: ${AWS_S3_ENDPOINT}
-    accessKey: ${AWS_S3_ACCESS_KEY}
-    secretKey: ${AWS_S3_SECRET_KEY}
-    bucketName: ${AWS_S3_BUCKET_NAME}
+    endpoint: ${AWS_S3_ENDPOINT:http://localhost:9000}
+    accessKey: ${AWS_S3_ACCESS_KEY:minioadmin}
+    secretKey: ${AWS_S3_SECRET_KEY:minioadmin}
+    bucketName: ${AWS_S3_BUCKET_NAME:lms-bucket}
     region: us-east-1
