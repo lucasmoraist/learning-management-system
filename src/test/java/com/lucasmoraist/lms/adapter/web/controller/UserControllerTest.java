@@ -5,6 +5,7 @@ import com.lucasmoraist.lms.adapter.web.dto.user.UpdateUserDTO;
 import com.lucasmoraist.lms.application.usecases.user.CreateUserCase;
 import com.lucasmoraist.lms.application.usecases.user.DeleteUserCase;
 import com.lucasmoraist.lms.application.usecases.user.GetCurrentUserCase;
+import com.lucasmoraist.lms.application.usecases.user.ListUsersCase;
 import com.lucasmoraist.lms.application.usecases.user.UpdateUserCase;
 import com.lucasmoraist.lms.domain.enums.RoleType;
 import com.lucasmoraist.lms.domain.exceptions.AuthenticationException;
@@ -61,6 +62,8 @@ class UserControllerTest {
     @MockitoBean
     DeleteUserCase deleteUserCase;
     @MockitoBean
+    ListUsersCase listUsersCase;
+    @MockitoBean
     TokenGateway tokenGateway;
     @MockitoBean
     CustomUserDetailsService customUserDetailsService;
@@ -81,8 +84,7 @@ class UserControllerTest {
                         "birthDate": "2000-01-01",
                         "document": "86100550865",
                         "email": "johndoe@email.com",
-                        "password": "password123",
-                        "role": "STUDENT"
+                        "password": "password123"
                     }
                     """;
 
@@ -103,8 +105,7 @@ class UserControllerTest {
                                 "name": "",
                                 "birthDate": "2000-01-01",
                                 "email": "johndoe@email.com",
-                                "password": "password123",
-                                "role": "STUDENT"
+                                "password": "password123"
                             }
                             """),
                     Arguments.of("""
@@ -112,24 +113,21 @@ class UserControllerTest {
                                 "name": "Jo",
                                 "birthDate": "2000-01-01",
                                 "email": "johndoe@email.com",
-                                "password": "password123",
-                                "role": "STUDENT"
+                                "password": "password123"
                             }
                             """),
                     Arguments.of("""
                             {
                                 "name": "John Doe",
                                 "email": "johndoe@email.com",
-                                "password": "password123",
-                                "role": "STUDENT"
+                                "password": "password123"
                             }
                             """),
                     Arguments.of("""
                             {
                                 "name": "John Doe",
                                 "birthDate": "2000-01-01",
-                                "password": "password123",
-                                "role": "STUDENT"
+                                "password": "password123"
                             }
                             """),
                     Arguments.of("""
@@ -137,8 +135,7 @@ class UserControllerTest {
                                 "name": "John Doe",
                                 "email": "invalid-email",
                                 "birthDate": "2000-01-01",
-                                "password": "password123",
-                                "role": "STUDENT"
+                                "password": "password123"
                             }
                             """),
                     Arguments.of("""
@@ -146,16 +143,14 @@ class UserControllerTest {
                                 "name": "John Doe",
                                 "birthDate": "2000-01-01",
                                 "email": "johndoe@email.com",
-                                "password": "12345",
-                                "role": "STUDENT"
+                                "password": "12345"
                             }
                             """),
                     Arguments.of("""
                             {
                                 "name": "John Doe",
                                 "birthDate": "2000-01-01",
-                                "email": "johndoe@email.com",
-                                "role": "STUDENT"
+                                "email": "johndoe@email.com"
                             }
                             """),
                     Arguments.of("""
@@ -189,8 +184,7 @@ class UserControllerTest {
                         "birthDate": "2000-01-01",
                         "document": "86100550865",
                         "email": "johndoe@email.com",
-                        "password": "password123",
-                        "role": "STUDENT"
+                        "password": "password123"
                     }
                     """;
 
