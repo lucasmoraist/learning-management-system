@@ -1,6 +1,6 @@
 CREATE TABLE tb_subscription (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    identity_id UUID NOT NULL,
+    user_id UUID NOT NULL,
     subscription_id VARCHAR(255) NOT NULL UNIQUE,
     status VARCHAR(50) NOT NULL, -- PAID, PENDING, CANCELED
     payment_method VARCHAR(50) NOT NULL, -- credit_card, pix
