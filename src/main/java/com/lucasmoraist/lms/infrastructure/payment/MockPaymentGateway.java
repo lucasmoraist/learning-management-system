@@ -27,7 +27,7 @@ public class MockPaymentGateway implements PaymentGateway {
 
     private PaymentResult notImplementedYet(String traceId, PaymentMethod paymentMethod) {
         log.warn("[{}] - [MOCK] {} payment method is not implemented yet", traceId, paymentMethod);
-        return new PaymentResult(null, PaymentStatus.FAILED.getStatus());
+        return new PaymentResult(null, PaymentStatus.FAILED);
     }
 
     // TODO: Implementar lógica para parcelas da assinatura, atualmente o mock só processa pagamentos à vista
@@ -45,7 +45,7 @@ public class MockPaymentGateway implements PaymentGateway {
 
             if (cardNumber.endsWith("0000")) {
                 log.warn("[{}] - [MOCK] Payment failed for card ending with 0000", traceId);
-                return new PaymentResult(null, PaymentStatus.FAILED.getStatus());
+                return new PaymentResult(null, PaymentStatus.FAILED);
             }
 
             final LocalDateTime today = LocalDateTime.now();
@@ -59,16 +59,16 @@ public class MockPaymentGateway implements PaymentGateway {
 
             if (expiryDate.isBefore(today)) {
                 log.warn("[{}] - [MOCK] Payment failed due to expired card", traceId);
-                return new PaymentResult(null, PaymentStatus.FAILED.getStatus());
+                return new PaymentResult(null, PaymentStatus.FAILED);
             }
 
             String fakeSubscriptionId = "sub_mock_" + UUID.randomUUID().toString().substring(0, 8);
             log.info("[{}] - [MOCK] Subscription created successfully with ID: {}", traceId, fakeSubscriptionId);
 
-            return new PaymentResult(fakeSubscriptionId, PaymentStatus.PAID.getStatus());
+            return new PaymentResult(fakeSubscriptionId, PaymentStatus.PAID);
         } else {
-            log.error("[{}] - [MOCK] Invalid subscription type for credit card payment", traceId);
-            return new PaymentResult(null, PaymentStatus.FAILED.getStatus());
+            log.warn("[{}] - [MOCK] Invalid subscription type for credit card payment", traceId);
+            return new PaymentResult(null, PaymentStatus.FAILED);
         }
     }
 
