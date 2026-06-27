@@ -32,10 +32,10 @@ public class SubscriptionEntity {
     @Id @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @OneToOne
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private ProfileEntity identityId;
+    @OneToOne(mappedBy = "subscription")
+    private ProfileEntity userId;
 
     private String subscriptionId;
 
