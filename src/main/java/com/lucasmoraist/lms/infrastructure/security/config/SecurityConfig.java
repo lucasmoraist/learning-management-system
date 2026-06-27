@@ -35,6 +35,7 @@ public class SecurityConfig {
             "/swagger-ui.html"
     };
 
+    // TODO: Revisar rotar para serem bloqueadas
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) {
         return http
