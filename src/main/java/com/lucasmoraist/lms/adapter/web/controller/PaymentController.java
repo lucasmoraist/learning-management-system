@@ -31,7 +31,7 @@ public class PaymentController {
         log.info("[{}] - Processing subscription for user with payment method {}", traceId, createSubscription.paymentMethod());
 
         PaymentResult result = this.createSubscriptionCase.execute(authorization, traceId, createSubscription);
-        URI location = URI.create("/api/v1/payment/" + result.externalSubscriptionId() + "/status");
+        URI location = URI.create("/api/v1/auth/refresh-role");
 
         return ResponseEntity.created(location).body(result);
     }
