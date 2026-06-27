@@ -43,10 +43,10 @@ public class ProfileEntity {
     @JoinColumn(name = "identity_id", unique = true, nullable = false)
     private IdentityEntity identity;
 
+    @OneToOne
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToOne(mappedBy = "identityId", cascade = CascadeType.ALL)
-    @JoinColumn(name = "subscription_id", unique = true, nullable = false)
+    @JoinColumn(name = "subscription_id")
     private SubscriptionEntity subscription;
 
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
