@@ -1,5 +1,6 @@
 package com.lucasmoraist.lms.infrastructure.database.persistence;
 
+import com.lucasmoraist.lms.domain.enums.RoleType;
 import com.lucasmoraist.lms.domain.model.user.Identity;
 import com.lucasmoraist.lms.infrastructure.database.entity.user.DocumentEntity;
 import com.lucasmoraist.lms.infrastructure.database.entity.user.IdentityEntity;
@@ -64,12 +65,26 @@ public class IdentityPersistence {
     }
 
     public void deleteByEntity(UUID id) {
-        IdentityEntity identity = this.identityRepository.findById(id)
+        IdentityEntity identity = getIdentityEntityById(id);
+        this.identityRepository.delete(identity);
+    }
+
+    @Transactional
+    public void updateRole(Identity identity, RoleType roleType) {
+        IdentityEntity identityEntity = getIdentityEntityById(identity.getId());
+        identityEntity.getRoles()
+                .forEach(roleEntity -> roleEntity.setName(roleType));
+
+        IdentityEntity updatedIdentity = this.identityRepository.save(identityEntity);
+        log.info("Updated role for user with id {} to {}", updatedIdentity.getId(), roleType);
+    }
+
+    private IdentityEntity getIdentityEntityById(UUID id) {
+        return this.identityRepository.findById(id)
                 .orElseThrow(() -> {
                     log.warn("User not found with id: {}", id);
                     return new EntityNotFoundException("User not found with id: " + id);
                 });
-        this.identityRepository.delete(identity);
     }
 
 }
