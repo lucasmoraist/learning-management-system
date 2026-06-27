@@ -19,7 +19,16 @@ public class MockPaymentGateway implements PaymentGateway {
     @Override
     public PaymentResult createSubscription(CreateSubscriptionDTO dto, String traceId) {
         return switch (dto.paymentMethod()) {
-            case CREDIT_CARD -> processCreditCardSubscription(dto, traceId);
+            case CREDIT_CARD -> createCreditCardSubscription(traceId);
+            case DEBIT_CARD -> notImplementedYet(traceId, PaymentMethod.DEBIT_CARD);
+            case PIX -> notImplementedYet(traceId, PaymentMethod.PIX);
+        };
+    }
+
+    @Override
+    public PaymentResult processPayment(CreateSubscriptionDTO dto, String traceId) {
+        return switch (dto.paymentMethod()) {
+            case CREDIT_CARD -> processCreditCardPayment(dto, traceId);
             case DEBIT_CARD -> notImplementedYet(traceId, PaymentMethod.DEBIT_CARD);
             case PIX -> notImplementedYet(traceId, PaymentMethod.PIX);
         };
@@ -31,9 +40,9 @@ public class MockPaymentGateway implements PaymentGateway {
     }
 
     // TODO: Implementar lógica para parcelas da assinatura, atualmente o mock só processa pagamentos à vista
-    private PaymentResult processCreditCardSubscription(CreateSubscriptionDTO dto, String traceId) {
+    private PaymentResult processCreditCardPayment(CreateSubscriptionDTO dto, String traceId) {
         if (dto.subscription() instanceof CreditSubscriptionDTO creditSubscriptionDTO) {
-            log.info("[{}] - [MOCK] Creating subscription", traceId);
+            log.info("[{}] - [MOCK] Processing credit card payment", traceId);
 
             try {
                 Thread.sleep(500); // Simulate processing time
@@ -62,14 +71,19 @@ public class MockPaymentGateway implements PaymentGateway {
                 return new PaymentResult(null, PaymentStatus.FAILED);
             }
 
-            String fakeSubscriptionId = "sub_mock_" + UUID.randomUUID().toString().substring(0, 8);
-            log.info("[{}] - [MOCK] Subscription created successfully with ID: {}", traceId, fakeSubscriptionId);
-
-            return new PaymentResult(fakeSubscriptionId, PaymentStatus.PAID);
+            log.info("[{}] - [MOCK] Payment processed successfully for card ending with {}", traceId, cardNumber.substring(cardNumber.length() - 4));
+            return new PaymentResult(null, PaymentStatus.PAID);
         } else {
             log.warn("[{}] - [MOCK] Invalid subscription type for credit card payment", traceId);
             return new PaymentResult(null, PaymentStatus.FAILED);
         }
+    }
+
+    private PaymentResult createCreditCardSubscription(String traceId) {
+        String fakeSubscriptionId = "sub_mock_" + UUID.randomUUID().toString().substring(0, 8);
+        log.info("[{}] - [MOCK] Subscription created successfully with ID: {}", traceId, fakeSubscriptionId);
+
+        return new PaymentResult(fakeSubscriptionId, PaymentStatus.PENDING);
     }
 
 }

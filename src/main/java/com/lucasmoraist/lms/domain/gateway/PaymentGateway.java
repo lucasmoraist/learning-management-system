@@ -6,5 +6,6 @@ import com.lucasmoraist.lms.domain.model.payment.PaymentResult;
 public interface PaymentGateway {
 
     PaymentResult createSubscription(CreateSubscriptionDTO dto, String traceId);
+    PaymentResult processPayment(CreateSubscriptionDTO dto, String traceId);
 
 }
