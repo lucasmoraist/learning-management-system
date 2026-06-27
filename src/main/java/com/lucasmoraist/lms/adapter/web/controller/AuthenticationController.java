@@ -2,6 +2,7 @@ package com.lucasmoraist.lms.adapter.web.controller;
 
 import com.lucasmoraist.lms.adapter.web.dto.auth.LoginDTO;
 import com.lucasmoraist.lms.application.usecases.authentication.GenerateTokenCase;
+import com.lucasmoraist.lms.application.usecases.authentication.RefreshRoleCase;
 import com.lucasmoraist.lms.application.utils.TraceIdUtils;
 import com.lucasmoraist.lms.domain.model.auth.Token;
 import jakarta.validation.Valid;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController {
 
     private final GenerateTokenCase generateTokenCase;
+    private final RefreshRoleCase refreshRoleCase;
 
     @PostMapping
     public ResponseEntity<Token> authentication(@Valid @RequestBody LoginDTO dto) {
@@ -29,6 +31,16 @@ public class AuthenticationController {
         Token token = this.generateTokenCase.execute(traceId, dto);
 
         return ResponseEntity.ok(token);
+    }
+
+    @PostMapping("/refresh-role")
+    public ResponseEntity<Token> refreshRole(@RequestBody Token token) {
+        String traceId = TraceIdUtils.generateTraceId();
+        log.info("[{}] - Received refresh role request for token: {}", traceId, token.getAccessToken());
+
+        Token refreshedToken = this.refreshRoleCase.execute(traceId, token);
+
+        return ResponseEntity.ok(refreshedToken);
     }
 
 }
