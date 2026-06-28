@@ -3,11 +3,13 @@ package com.lucasmoraist.lms.infrastructure.database.persistence;
 import com.lucasmoraist.lms.domain.enums.PaymentStatus;
 import com.lucasmoraist.lms.domain.model.payment.Subscription;
 import com.lucasmoraist.lms.infrastructure.database.entity.payment.SubscriptionEntity;
-import com.lucasmoraist.lms.infrastructure.database.entity.user.ProfileEntity;
 import com.lucasmoraist.lms.infrastructure.database.repository.SubscriptionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Component
@@ -21,14 +23,21 @@ public class SubscriptionPersistence {
         this.modelMapper = modelMapper;
     }
 
+    public Optional<Subscription> findById(UUID subscriptionId) {
+        return this.subscriptionRepository.findById(subscriptionId)
+                .map(entity -> this.modelMapper.map(entity, Subscription.class));
+    }
+
     public Subscription save(Subscription subscription, String traceId) {
         log.debug("[{}] - Saving subscription for user with id {}", traceId, subscription.getUserId().getId());
 
         SubscriptionEntity subscriptionEntity = this.modelMapper.map(subscription, SubscriptionEntity.class);
 
-        ProfileEntity profileRef = new ProfileEntity();
-        profileRef.setId(subscription.getUserId().getId());
-        subscriptionEntity.setUserId(profileRef);
+        if (subscription.getId() != null) {
+            subscriptionEntity.setId(subscription.getId());
+        }
+
+        subscriptionEntity.setUserId(null);
 
         this.subscriptionRepository.save(subscriptionEntity);
         log.debug("[{}] - Subscription for user with id {} saved successfully", traceId, subscription.getUserId().getId());
