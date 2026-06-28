@@ -7,6 +7,7 @@ import com.lucasmoraist.lms.domain.enums.PaymentStatus;
 import com.lucasmoraist.lms.domain.enums.RoleType;
 import com.lucasmoraist.lms.domain.exceptions.PaymentFailedException;
 import com.lucasmoraist.lms.domain.exceptions.PaymentProcessingException;
+import com.lucasmoraist.lms.domain.gateway.CacheGateway;
 import com.lucasmoraist.lms.domain.gateway.PaymentGateway;
 import com.lucasmoraist.lms.domain.model.payment.PaymentResult;
 import com.lucasmoraist.lms.domain.model.payment.Subscription;
@@ -30,6 +31,7 @@ import java.util.concurrent.Executors;
 public class CreateSubscriptionCase {
 
     private final GetCurrentUserCase getCurrentUserCase;
+    private final CacheGateway cacheGateway;
     private final IdentityPersistence identityPersistence;
     private final SubscriptionPersistence subscriptionPersistence;
     private final PaymentGateway paymentGateway;
@@ -58,8 +60,7 @@ public class CreateSubscriptionCase {
         String lockKey = "idempotency:subscription:user:" + idempotencyKey;
         log.debug("[{}] - Generated idempotency key: {} and lock key: {}", traceId, idempotencyKey, lockKey);
 
-        // TODO: Implementar lógica setar chave no redis caso ela não exista e com ttl de 15 segundos
-        boolean isFirstRequest = false;
+        boolean isFirstRequest = this.cacheGateway.setIfAbsent(lockKey, PaymentStatus.PENDING.getStatus(), 40L);
 
         if (!isFirstRequest) {
             log.warn("[{}] - Duplicate subscription creation request detected for user with id {}. Idempotency key: {}",
@@ -72,7 +73,7 @@ public class CreateSubscriptionCase {
 
             if (PaymentStatus.FAILED.equals(result.status())) {
                 log.warn("[{}] - Gateway creation returned FAILED status immediately.", traceId);
-                // TODO: Limpar lockKey do Redis aqui quando implementar
+                this.cacheGateway.delete(lockKey);
                 return result;
             }
 
@@ -106,14 +107,14 @@ public class CreateSubscriptionCase {
                     identity,
                     result.externalSubscriptionId(),
                     traceId,
+                    lockKey,
                     createSubscription
             ));
 
             return result;
         } catch (RuntimeException ex) {
             log.error("[{}] - Catastrophic error creating subscription for user {}: {}", traceId, identity.getId(), ex.getMessage());
-            // TODO: Implementar lógica de rollback caso a criação da assinatura falhe, para evitar inconsistências no banco de
-            //  dados e remover a chave de idempotência do Redis para permitir uma nova tentativa
+            this.cacheGateway.delete(lockKey);
             throw ex;
         }
     }
@@ -132,6 +133,7 @@ public class CreateSubscriptionCase {
             Identity identity,
             String externalSubscriptionId,
             String traceId,
+            String lockKey,
             CreateSubscriptionDTO createSubscription
     ) {
         PaymentResult result = this.paymentGateway.processPayment(createSubscription, traceId);
@@ -150,7 +152,7 @@ public class CreateSubscriptionCase {
                     traceId, externalSubscriptionId, ex.getMessage(), ex);
             this.subscriptionPersistence.updatePaymentStatus(externalSubscriptionId, PaymentStatus.FAILED, traceId);
         } finally {
-            // TODO: Implementar lógica para remover a chave de idempotência do Redis após o processamento do pagamento
+            this.cacheGateway.delete(lockKey);
             log.debug("[{}] - Finished processing payment for subscription with id {}",
                     traceId, externalSubscriptionId);
         }
