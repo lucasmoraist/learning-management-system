@@ -1,7 +1,9 @@
 package com.lucasmoraist.lms.application.usecases.lesson;
 
+import com.lucasmoraist.lms.application.usecases.user.GetCurrentUserCase;
 import com.lucasmoraist.lms.domain.gateway.CacheGateway;
 import com.lucasmoraist.lms.domain.model.catalog.LessonProgress;
+import com.lucasmoraist.lms.domain.model.user.Identity;
 import com.lucasmoraist.lms.infrastructure.database.persistence.LessonProgressPersistence;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,11 +21,16 @@ public class UpdateLessonProgressCase {
     private final LessonProgressPersistence lessonProgressPersistence;
     private final CacheGateway cacheGateway;
     private final FindLessonByIdCase findLessonByIdCase;
+    private final GetCurrentUserCase getCurrentUserCase;
 
     private static final String REDIS_KEY_PREFIX = "lms:progress:profile:%s:lesson:%s";
 
-    public LessonProgress execute(UUID profileId, UUID lessonId, Integer currentSeconds, String traceId) {
+    public LessonProgress execute(String authorization, UUID lessonId, Integer currentSeconds, String traceId) {
+        Identity currentUser = getCurrentUserCase.execute(authorization, traceId);
+        UUID profileId = currentUser.getProfile().getId();
+
         try {
+
             String cacheKey = String.format(REDIS_KEY_PREFIX, profileId, lessonId);
 
             Map<String, Object> lesson = findLessonByIdCase.execute(traceId, lessonId);
