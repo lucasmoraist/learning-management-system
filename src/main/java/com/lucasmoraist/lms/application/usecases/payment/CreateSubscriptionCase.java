@@ -87,6 +87,18 @@ public class CreateSubscriptionCase {
                 dynamicSubscription.setCurrentPeriodEnd(LocalDateTime.now().plusMonths(1));
 
                 subscriptionSaved = this.subscriptionPersistence.save(dynamicSubscription, traceId);
+
+                this.profilePersistence.updateSubscribe(profile, subscriptionSaved);
+
+                this.processorAsync.execute(() -> this.processPaymentAsync(
+                        identity,
+                        dynamicSubscription.getSubscriptionId(),
+                        traceId,
+                        lockKey,
+                        createSubscription
+                ));
+
+                return new PaymentResult(dynamicSubscription.getSubscriptionId(), result.status());
             } else {
                 log.info("[{}] - Creating a brand new subscription record.", traceId);
 
@@ -99,17 +111,18 @@ public class CreateSubscriptionCase {
                         .build();
 
                 subscriptionSaved = this.subscriptionPersistence.save(subscriptionSaved, traceId);
+
+                this.profilePersistence.updateSubscribe(profile, subscriptionSaved);
+
+                this.processorAsync.execute(() -> this.processPaymentAsync(
+                        identity,
+                        result.externalSubscriptionId(),
+                        traceId,
+                        lockKey,
+                        createSubscription
+                ));
             }
 
-            this.profilePersistence.updateSubscribe(profile, subscriptionSaved);
-
-            this.processorAsync.execute(() -> this.processPaymentAsync(
-                    identity,
-                    result.externalSubscriptionId(),
-                    traceId,
-                    lockKey,
-                    createSubscription
-            ));
 
             return result;
         } catch (RuntimeException ex) {
