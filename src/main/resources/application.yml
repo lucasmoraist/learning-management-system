@@ -5,6 +5,10 @@ spring:
       max-request-size: 50MB
   application:
     name: learning-management-system
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
   flyway:
     enabled: ${FLYWAY_ENABLED}
     baseline-on-migrate: ${FLYWAY_BASELINE_ON_MIGRATE}
