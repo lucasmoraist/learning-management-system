@@ -23,7 +23,8 @@ public class LessonProgressPersistence {
     }
 
     public Optional<LessonProgress> findByProfileAndLesson(UUID profileId, UUID lessonId) {
-        return lessonProgressRepository.findByProfileIdAndLessonId(profileId, lessonId);
+        return lessonProgressRepository.findByProfileIdAndLessonId(profileId, lessonId)
+                .map(entity -> modelMapper.map(entity, LessonProgress.class));
     }
 
     public long countLessonsByCourseId(UUID courseId) {

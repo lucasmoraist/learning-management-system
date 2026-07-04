@@ -1,7 +1,9 @@
 package com.lucasmoraist.lms.application.usecases.lesson;
 
 import com.lucasmoraist.lms.domain.gateway.CacheGateway;
+import com.lucasmoraist.lms.domain.exceptions.LessonNotFoundException;
 import com.lucasmoraist.lms.domain.model.catalog.LessonProgress;
+import com.lucasmoraist.lms.infrastructure.database.persistence.LessonPersistence;
 import com.lucasmoraist.lms.infrastructure.database.persistence.LessonProgressPersistence;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,10 +18,15 @@ public class GetLessonProgressCase {
 
     private final LessonProgressPersistence progressPersistence;
     private final CacheGateway cacheGateway;
+    private final LessonPersistence lessonPersistence;
 
     private static final String REDIS_KEY_PREFIX = "lms:progress:profile:%s:lesson:%s";
 
     public LessonProgress execute(UUID profileId, UUID lessonId) {
+        if (!lessonPersistence.existsById(lessonId)) {
+            throw new LessonNotFoundException("Lesson not found");
+        }
+
         try {
             String cacheKey = String.format(REDIS_KEY_PREFIX, profileId, lessonId);
 

@@ -1,5 +1,6 @@
 package com.lucasmoraist.lms.infrastructure.bucket;
 
+import com.lucasmoraist.lms.domain.exceptions.StorageException;
 import com.lucasmoraist.lms.domain.gateway.BucketGateway;
 import com.lucasmoraist.lms.infrastructure.config.aws.properties.S3Properties;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +41,7 @@ public class AwsS3Service implements BucketGateway {
             log.debug("File uploaded successfully to S3 with key: {}", key);
         } catch (IOException ex) {
             log.error("[{}] - Error uploading video to Supabase Storage: {}", key, ex.getMessage());
-            throw new RuntimeException("Failed to upload video", ex);
+            throw new StorageException("Failed to upload video", ex);
         }
     }
 

@@ -50,13 +50,15 @@ public class UpdateLessonProgressCase {
             log.debug("[{}] - Current progress for profile {} and lesson {}: {}", traceId, profileId, lessonId, progress);
 
             boolean wasCompletedBefore = Boolean.TRUE.equals(progress.getCompleted());
-            progress.updateProgress(currentSeconds, (Integer) lesson.get("durationInSeconds"));
+            LocalDateTime previousUpdatedAt = progress.getUpdatedAt();
+            Map<String, Object> lessonDetails = (Map<String, Object>) lesson.get("lesson");
+            progress.updateProgress(currentSeconds, (Integer) lessonDetails.get("durationInSeconds"));
 
             // Expires in 7 days
             cacheGateway.set(cacheKey, progress, 7 * 24 * 60 * 60);
 
-            if (progress.getCompleted() || progress.getUpdatedAt() == null ||
-                progress.getUpdatedAt().isBefore(LocalDateTime.now().minusMinutes(1))) {
+            if (progress.getCompleted() || previousUpdatedAt == null ||
+                previousUpdatedAt.isBefore(LocalDateTime.now().minusMinutes(1))) {
                 progress = lessonProgressPersistence.save(progress);
             }
 

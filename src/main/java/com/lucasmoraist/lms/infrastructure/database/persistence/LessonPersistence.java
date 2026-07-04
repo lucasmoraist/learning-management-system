@@ -1,5 +1,6 @@
 package com.lucasmoraist.lms.infrastructure.database.persistence;
 
+import com.lucasmoraist.lms.domain.exceptions.LessonNotFoundException;
 import com.lucasmoraist.lms.domain.model.catalog.Lesson;
 import com.lucasmoraist.lms.infrastructure.database.entity.catalog.LessonEntity;
 import com.lucasmoraist.lms.infrastructure.database.repository.LessonRepository;
@@ -18,8 +19,12 @@ public class LessonPersistence {
 
     public Lesson getLessonById(UUID lessonId) {
         LessonEntity entity = this.lessonRepository.findById(lessonId)
-                .orElseThrow(() -> new RuntimeException("Lesson not found"));
+                .orElseThrow(() -> new LessonNotFoundException("Lesson not found"));
         return this.modelMapper.map(entity, Lesson.class);
+    }
+
+    public boolean existsById(UUID lessonId) {
+        return this.lessonRepository.existsById(lessonId);
     }
 
     public Lesson save(Lesson lesson) {
