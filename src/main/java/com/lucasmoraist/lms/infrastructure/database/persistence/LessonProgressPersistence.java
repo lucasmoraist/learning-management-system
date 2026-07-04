@@ -26,6 +26,14 @@ public class LessonProgressPersistence {
         return lessonProgressRepository.findByProfileIdAndLessonId(profileId, lessonId);
     }
 
+    public long countLessonsByCourseId(UUID courseId) {
+        return lessonProgressRepository.countLessonsByCourseId(courseId);
+    }
+
+    public long countCompletedLessonsByProfileAndCourse(UUID profileId, UUID courseId) {
+        return lessonProgressRepository.countCompletedLessonsByProfileIdAndCourseId(profileId, courseId);
+    }
+
     public LessonProgress save(LessonProgress progress) {
         LessonProgressEntity entity = modelMapper.map(progress, LessonProgressEntity.class);
         LessonProgressEntity savedEntity = lessonProgressRepository.save(entity);

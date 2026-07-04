@@ -1,6 +1,8 @@
 package com.lucasmoraist.lms.adapter.web.controller;
 
+import com.lucasmoraist.lms.adapter.web.dto.course.CourseProgressDTO;
 import com.lucasmoraist.lms.adapter.web.dto.lesson.UpdateProgressDTO;
+import com.lucasmoraist.lms.application.usecases.course.GetCourseProgressCase;
 import com.lucasmoraist.lms.application.usecases.lesson.GetLessonProgressCase;
 import com.lucasmoraist.lms.application.usecases.lesson.UpdateLessonProgressCase;
 import com.lucasmoraist.lms.application.utils.TraceIdUtils;
@@ -28,6 +30,7 @@ public class ProgressionController {
 
     private final UpdateLessonProgressCase updateLessonProgressCase;
     private final GetLessonProgressCase getLessonProgressCase;
+    private final GetCourseProgressCase getCourseProgressCase;
 
     @PostMapping("/lessons/{lessonId}/heartbeat")
     public ResponseEntity<LessonProgress> heartbeat(
@@ -52,6 +55,18 @@ public class ProgressionController {
         log.info("[{}] - Fetching progress for lesson {} from profile {}", traceId, lessonId, profileId);
 
         LessonProgress progress = getLessonProgressCase.execute(profileId, lessonId);
+        return ResponseEntity.ok(progress);
+    }
+
+    @GetMapping("/courses/{courseId}")
+    public ResponseEntity<CourseProgressDTO> getCourseProgress(
+            @PathVariable UUID courseId,
+            @RequestHeader("Authorization") String authorization
+    ) {
+        String traceId = TraceIdUtils.generateTraceId();
+        log.info("[{}] - Fetching progress for course {}", traceId, courseId);
+
+        CourseProgressDTO progress = getCourseProgressCase.execute(traceId, courseId, authorization);
         return ResponseEntity.ok(progress);
     }
 

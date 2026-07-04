@@ -25,6 +25,10 @@ public class CoursePersistence {
         return entityOpt.map(entity -> this.modelMapper.map(entity, Course.class));
     }
 
+    public boolean existsById(UUID courseId) {
+        return this.courseRepository.existsById(courseId);
+    }
+
     @Transactional
     public Course save(Course course) {
         CourseEntity entity = this.modelMapper.map(course, CourseEntity.class);
