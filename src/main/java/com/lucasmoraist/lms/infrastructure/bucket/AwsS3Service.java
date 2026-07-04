@@ -45,6 +45,20 @@ public class AwsS3Service implements BucketGateway {
     }
 
     @Override
+    public void uploadBytes(String key, byte[] content, String contentType) {
+        log.debug("Uploading bytes to S3 with key: {}", key);
+
+        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                .bucket(s3Properties.getBucketName())
+                .key(key)
+                .contentType(contentType)
+                .build();
+
+        s3Client.putObject(putObjectRequest, RequestBody.fromBytes(content));
+        log.debug("Bytes uploaded successfully to S3 with key: {}", key);
+    }
+
+    @Override
     public String getPublicUrl(String key) {
         if (key == null || key.isEmpty()) {
             log.warn("Key is null or empty, cannot generate public URL");

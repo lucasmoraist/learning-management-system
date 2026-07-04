@@ -1,6 +1,7 @@
 package com.lucasmoraist.lms.adapter.web.controller;
 
 import com.lucasmoraist.lms.application.usecases.authentication.GenerateTokenCase;
+import com.lucasmoraist.lms.application.usecases.authentication.RefreshRoleCase;
 import com.lucasmoraist.lms.domain.exceptions.AuthenticationException;
 import com.lucasmoraist.lms.domain.exceptions.CertificateException;
 import com.lucasmoraist.lms.domain.exceptions.TokenException;
@@ -30,6 +31,8 @@ class AuthenticationControllerTest {
     MockMvc mockMvc;
     @MockitoBean
     GenerateTokenCase generateTokenCase;
+    @MockitoBean
+    RefreshRoleCase refreshRoleCase;
     @MockitoBean
     TokenGateway tokenGateway;
     @MockitoBean

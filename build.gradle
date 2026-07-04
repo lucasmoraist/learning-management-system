@@ -78,6 +78,9 @@ dependencies {
 
     // S3
     implementation "software.amazon.awssdk:s3:${awsSdkVersion}"
+
+    // PDF
+    implementation 'org.apache.pdfbox:pdfbox:3.0.3'
 }
 
 bootJar {

@@ -72,6 +72,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/courses/**").hasAnyRole(RoleType.SUBSCRIBER.name(), RoleType.INSTRUCTOR.name(), RoleType.ADMIN.name())
                         .requestMatchers(HttpMethod.GET, "/api/v1/lessons/**").hasAnyRole(RoleType.SUBSCRIBER.name(), RoleType.INSTRUCTOR.name(), RoleType.ADMIN.name())
 
+                        // 7. Certificados
+                        .requestMatchers("/api/v1/certificates/**").hasAnyRole(RoleType.SUBSCRIBER.name(), RoleType.INSTRUCTOR.name(), RoleType.ADMIN.name())
+
                         // Qualquer
                         .anyRequest().authenticated()
                 )
