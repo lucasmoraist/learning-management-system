@@ -1,0 +1,798 @@
+{
+  "info": {
+    "_postman_id": "ec096f46-2811-40eb-ae3c-f3ac4fe87610",
+    "name": "Learning Management System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "26335691"
+  },
+  "item": [
+    {
+      "name": "auth",
+      "item": [
+        {
+          "name": "Login (/api/v1/auth)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set(\"token\", jsonData.accessToken);",
+                  "    console.log(\"Token JWT atualizado automaticamente na coleção!\");",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"lucas@email.com\",\n  \"password\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{local}}/api/v1/auth",
+              "host": [
+                "{{local}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh Role (/api/v1/auth/refresh-role)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"accessToken\": \"{{token}}\",\n    \"expiresIn\": 3600,\n    \"type\": \"Bearer\"\n}"
+            },
+            "url": {
+              "raw": "{{local}}/api/v1/auth/refresh-role",
+              "host": [
+                "{{local}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "refresh-role"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "user",
+      "item": [
+        {
+          "name": "Get Current User (/api/v1/users/me)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "accept",
+                "value": "*/*"
+              }
+            ],
+            "url": {
+              "raw": "{{local}}/api/v1/users/me",
+              "host": [
+                "{{local}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Users - Admin Only (/api/v1/users/list)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "accept",
+                "value": "*/*"
+              }
+            ],
+            "url": {
+              "raw": "{{local}}/api/v1/users/list?page=0&size=10",
+              "host": [
+                "{{local}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "list"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register User (/api/v1/users/register)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Lucas Morais\",\n  \"birthDate\": \"2004-01-11\",\n  \"document\": \"86100550865\",\n  \"email\": \"lucas@email.com\",\n  \"password\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{local}}/api/v1/users/register",
+              "host": [
+                "{{local}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Profile (/api/v1/users/me/update)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"profile\": {\n    \"name\": \"Lucas de Morais\",\n    \"bio\": \"Software Engineer\",\n    \"socialLinks\": [\n      {\n        \"name\": \"GitHub\",\n        \"link\": \"https://github.com\"\n      }\n    ]\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{local}}/api/v1/users/me/update",
+              "host": [
+                "{{local}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "me",
+                "update"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Account (/api/v1/users/me/delete)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{local}}/api/v1/users/me/delete",
+              "host": [
+                "{{local}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "me",
+                "delete"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "catalog",
+      "item": [
+        {
+          "name": "course",
+          "item": [
+            {
+              "name": "Create Course (/api/v1/courses/create)",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"title\": \"Curso de Java\",\n    \"description\": \"Curso introdutório de Java para iniciantes\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{local}}/api/v1/courses/create",
+                  "host": [
+                    "{{local}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "courses",
+                    "create"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Find Course By Id (/api/v1/courses/{courseId})",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{local}}/api/v1/courses/{{courseId}}",
+                  "host": [
+                    "{{local}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "courses",
+                    "{{courseId}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "module",
+          "item": [
+            {
+              "name": "Add Module to Course (/api/v1/modules/add/{courseId})",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"title\": \"Programação Orientada a Objetos (POO)\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{local}}/api/v1/modules/add/{{courseId}}",
+                  "host": [
+                    "{{local}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "modules",
+                    "add",
+                    "{{courseId}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "lesson",
+          "item": [
+            {
+              "name": "Add Lesson to Module (/api/v1/lessons/add/module/{moduleId})",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "contentType": "application/json",
+                      "key": "data",
+                      "type": "text",
+                      "value": "{\"title\": \"O que são variáveis\"}"
+                    },
+                    {
+                      "key": "video",
+                      "type": "file",
+                      "value": ""
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{local}}/api/v1/lessons/add/module/{{moduleId}}",
+                  "host": [
+                    "{{local}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "lessons",
+                    "add",
+                    "module",
+                    "{{moduleId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Lesson Content By Id (/api/v1/lessons/{lessonId})",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{local}}/api/v1/lessons/{{lessonId}}",
+                  "host": [
+                    "{{local}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "lessons",
+                    "{{lessonId}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "progression",
+      "item": [
+        {
+          "name": "Send Video Heartbeat Progress (/api/v1/progress/lessons/{lessonId}/heartbeat)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"currentSeconds\": 95\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{local}}/api/v1/progress/lessons/{{lessonId}}/heartbeat",
+              "host": [
+                "{{local}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "progress",
+                "lessons",
+                "{{lessonId}}",
+                "heartbeat"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Lesson Resume Progress (/api/v1/progress/lessons/{lessonId})",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{local}}/api/v1/progress/lessons/{{lessonId}}?profileId={{profileId}}",
+              "host": [
+                "{{local}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "progress",
+                "lessons",
+                "{{lessonId}}"
+              ],
+              "query": [
+                {
+                  "key": "profileId",
+                  "value": "{{profileId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Course Percentage Progress (/api/v1/progress/courses/{courseId})",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{local}}/api/v1/progress/courses/{{courseId}}",
+              "host": [
+                "{{local}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "progress",
+                "courses",
+                "{{courseId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "payment",
+      "item": [
+        {
+          "name": "Subscribe (/api/v1/payment/subscribe)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"paymentMethod\": \"CREDIT_CARD\",\n    \"subscription\": {\n        \"holderName\": \"Lucas Morais\",\n        \"cardNumber\": \"11112222333344445555\",\n        \"expMonth\": \"12\",\n        \"expYear\": \"2030\",\n        \"cvv\": \"123\"\n    }    \n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{local}}/api/v1/payment/subscribe",
+              "host": [
+                "{{local}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "payment",
+                "subscribe"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel Subscription (/api/v1/payment/{subscriptionId}/cancel)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{local}}/api/v1/payment/{{subscriptionId}}/cancel",
+              "host": [
+                "{{local}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "payment",
+                "{{subscriptionId}}",
+                "cancel"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "certificate",
+      "item": [
+        {
+          "name": "List My Certificates (/api/v1/certificates/me)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{local}}/api/v1/certificates/me",
+              "host": [
+                "{{local}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "certificates",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Download Certificate PDF (/api/v1/certificates/{certificateId}/download)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{local}}/api/v1/certificates/{{certificateId}}/download",
+              "host": [
+                "{{local}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "certificates",
+                "{{certificateId}}",
+                "download"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "local",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "courseId",
+      "value": "mude-para-um-uuid-de-curso-valido"
+    },
+    {
+      "key": "moduleId",
+      "value": "mude-para-um-uuid-de-modulo-valido"
+    },
+    {
+      "key": "lessonId",
+      "value": "mude-para-um-uuid-de-licao-valido"
+    },
+    {
+      "key": "profileId",
+      "value": "mude-para-o-id-do-seu-perfil"
+    },
+    {
+      "key": "subscriptionId",
+      "value": "mude-para-um-id-de-assinatura-valido"
+    },
+    {
+      "key": "certificateId",
+      "value": "mude-para-um-id-de-certificado-valido"
+    }
+  ]
+}
