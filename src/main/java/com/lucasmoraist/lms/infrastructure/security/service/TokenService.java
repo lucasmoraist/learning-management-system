@@ -11,11 +11,14 @@ import com.lucasmoraist.lms.domain.model.user.Identity;
 import com.lucasmoraist.lms.domain.model.auth.Token;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.interfaces.RSAPrivateKey;
@@ -25,6 +28,7 @@ import java.security.spec.X509EncodedKeySpec;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
@@ -41,10 +45,25 @@ public class TokenService implements TokenGateway {
     private final PrivateKey privateKey;
     private final PublicKey publicKey;
 
-    public TokenService(@Value("${spring.application.name}") String applicationName) {
+    public TokenService(@Value("${spring.application.name}") String applicationName, Environment environment) {
         this.applicationName = applicationName;
-        this.privateKey = loadPrivateKey();
-        this.publicKey = loadPublicKey();
+        boolean isTestProfile = Arrays.asList(environment.getActiveProfiles()).contains("test");
+
+        if (isTestProfile) {
+            log.info("Test profile detected! Generating temporary in-memory RSA keys...");
+            try {
+                KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
+                keyGen.initialize(2048);
+                KeyPair pair = keyGen.generateKeyPair();
+                this.privateKey = pair.getPrivate();
+                this.publicKey = pair.getPublic();
+            } catch (Exception e) {
+                throw new CertificateException("Failed to generate generic testing keys", e);
+            }
+        } else {
+            this.privateKey = loadPrivateKey();
+            this.publicKey = loadPublicKey();
+        }
     }
 
     @Override
