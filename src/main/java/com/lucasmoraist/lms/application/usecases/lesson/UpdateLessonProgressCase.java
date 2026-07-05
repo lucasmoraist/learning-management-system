@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 @Slf4j
 @Service
@@ -26,6 +28,7 @@ public class UpdateLessonProgressCase {
     private final GetCurrentUserCase getCurrentUserCase;
     private final LessonRepository lessonRepository;
     private final IssueCertificateCase issueCertificateCase;
+    private final Executor processorAsync = Executors.newVirtualThreadPerTaskExecutor();
 
     private static final String REDIS_KEY_PREFIX = "lms:progress:profile:%s:lesson:%s";
 
@@ -63,7 +66,7 @@ public class UpdateLessonProgressCase {
             }
 
             if (!wasCompletedBefore && Boolean.TRUE.equals(progress.getCompleted())) {
-                tryIssueCertificate(traceId, profileId, lessonId);
+                processorAsync.execute(() -> tryIssueCertificate(traceId, profileId, lessonId));
             }
 
             return progress;
