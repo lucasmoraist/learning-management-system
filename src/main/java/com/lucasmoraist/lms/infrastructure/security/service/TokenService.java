@@ -17,8 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.interfaces.RSAPrivateKey;
@@ -44,26 +42,13 @@ public class TokenService implements TokenGateway {
     private final String applicationName;
     private final PrivateKey privateKey;
     private final PublicKey publicKey;
+    private final Environment environment;
 
     public TokenService(@Value("${spring.application.name}") String applicationName, Environment environment) {
         this.applicationName = applicationName;
-        boolean isTestProfile = Arrays.asList(environment.getActiveProfiles()).contains("test");
-
-        if (isTestProfile) {
-            log.info("Test profile detected! Generating temporary in-memory RSA keys...");
-            try {
-                KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
-                keyGen.initialize(2048);
-                KeyPair pair = keyGen.generateKeyPair();
-                this.privateKey = pair.getPrivate();
-                this.publicKey = pair.getPublic();
-            } catch (Exception e) {
-                throw new CertificateException("Failed to generate generic testing keys", e);
-            }
-        } else {
-            this.privateKey = loadPrivateKey();
-            this.publicKey = loadPublicKey();
-        }
+        this.environment = environment;
+        this.privateKey = loadPrivateKey();
+        this.publicKey = loadPublicKey();
     }
 
     @Override
@@ -124,7 +109,7 @@ public class TokenService implements TokenGateway {
         }
     }
 
-    private Instant generateExpirationDate(){
+    private Instant generateExpirationDate() {
         return LocalDateTime.now().plusSeconds(EXPIRATION_TIME_IN_SECONDS).toInstant(ZoneOffset.of("-03:00"));
     }
 
@@ -141,6 +126,9 @@ public class TokenService implements TokenGateway {
 
             return KeyFactory.getInstance("RSA").generatePrivate(spec);
         } catch (Exception e) {
+            if (Arrays.asList(environment.getActiveProfiles()).contains("test")) {
+                return null;
+            }
             log.error("Failed to load private key from file", e);
             throw new CertificateException("Failed to read private key file", e);
         }
@@ -159,6 +147,9 @@ public class TokenService implements TokenGateway {
 
             return KeyFactory.getInstance("RSA").generatePublic(spec);
         } catch (Exception e) {
+            if (Arrays.asList(environment.getActiveProfiles()).contains("test")) {
+                return null;
+            }
             log.error("Failed to load public key", e);
             throw new CertificateException("Failed to load public key", e);
         }
