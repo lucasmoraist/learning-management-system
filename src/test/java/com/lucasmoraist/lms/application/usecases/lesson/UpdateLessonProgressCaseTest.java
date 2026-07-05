@@ -75,7 +75,6 @@ class UpdateLessonProgressCaseTest {
         when(cacheGateway.get(cacheKey, LessonProgress.class)).thenReturn(Optional.empty());
         when(lessonProgressPersistence.findByProfileAndLesson(profileId, lessonId)).thenReturn(Optional.empty());
         when(lessonProgressPersistence.save(any(LessonProgress.class))).thenAnswer(invocation -> invocation.getArgument(0));
-        when(lessonRepository.findCourseIdByLessonId(lessonId)).thenReturn(Optional.empty());
 
         LessonProgress progress = updateLessonProgressCase.execute(authorization, lessonId, 95, traceId);
 
