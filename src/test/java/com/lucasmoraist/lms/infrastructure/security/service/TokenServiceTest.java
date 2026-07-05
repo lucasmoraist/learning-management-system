@@ -34,10 +34,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class TokenServiceTest {
 
     @InjectMocks
-    private TokenService tokenService;
+    TokenService tokenService;
 
-    private RSAPublicKey publicKey;
-    private RSAPrivateKey privateKey;
+    RSAPublicKey publicKey;
+    RSAPrivateKey privateKey;
 
     @BeforeEach
     void setUp() throws Exception {

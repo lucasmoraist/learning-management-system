@@ -26,7 +26,6 @@ import java.security.spec.X509EncodedKeySpec;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
@@ -35,18 +34,14 @@ import java.util.UUID;
 @Service
 public class TokenService implements TokenGateway {
 
-    // TODO: Pensar em modos de implementar um refresh token para evitar que o usuário precise logar novamente a cada hora, ou seja, a cada expiração do token.
-
     private static final Integer EXPIRATION_TIME_IN_SECONDS = 3600; // 1 hour
 
     private final String applicationName;
     private final PrivateKey privateKey;
     private final PublicKey publicKey;
-    private final Environment environment;
 
-    public TokenService(@Value("${spring.application.name}") String applicationName, Environment environment) {
+    public TokenService(@Value("${spring.application.name}") String applicationName) {
         this.applicationName = applicationName;
-        this.environment = environment;
         this.privateKey = loadPrivateKey();
         this.publicKey = loadPublicKey();
     }
@@ -126,11 +121,8 @@ public class TokenService implements TokenGateway {
 
             return KeyFactory.getInstance("RSA").generatePrivate(spec);
         } catch (Exception e) {
-            if (Arrays.asList(environment.getActiveProfiles()).contains("test")) {
-                return null;
-            }
             log.error("Failed to load private key from file", e);
-            throw new CertificateException("Failed to read private key file", e);
+            return null;
         }
     }
 
@@ -147,11 +139,8 @@ public class TokenService implements TokenGateway {
 
             return KeyFactory.getInstance("RSA").generatePublic(spec);
         } catch (Exception e) {
-            if (Arrays.asList(environment.getActiveProfiles()).contains("test")) {
-                return null;
-            }
             log.error("Failed to load public key", e);
-            throw new CertificateException("Failed to load public key", e);
+            return null;
         }
     }
 
